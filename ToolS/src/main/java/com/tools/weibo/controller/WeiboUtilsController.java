@@ -475,7 +475,7 @@ public class WeiboUtilsController {
     
     private Map<String, String> getCookies() {
         Map<String, String> cookies = Maps.newHashMap();
-        String cookiesStr = "tid=hJPPDJ+3K+lSqxGbk8K36jCCKa48WrGkMOIZjI2v0I4=__095;SINAGLOBAL=8065907396593.657.1594058218758;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5KMhUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t;UOR=,,www.google.com;SCF=AneetFdEbQdzrPjcqxzupwzJub5dDpiV3Eq2fxW6pccnLRYosB45KSy9EYTbSNH3kqtaMfOxBwwCQ9PHGqvnENc.;SUB=_2A25y50n6DeRhGeBJ7VAQ8y3LzTWIHXVRlTwyrDV8PUNbmtAKLUrZkW9NRisOaqBueTghfUIv0irT7obalu2kggHJ;SRT=D.QqHBJZPuiOBli!Mb4cYGS4H1isSB4OYuJrowPEWHNEYd4co4W3bpMERt4EPKRcsrA4kJPQHTTsVuObH9VryYV4HsSPMeTFSPNQRnTQH4i-y8RdosJckeSrY1*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIOdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77;SRF=1608726954;ALF=1640262954;SSOLoginState=1608726954;wvr=6;_s_tentry=-;Apache=9461767221891.807.1608732941708;ULV=1608732941780:19:3:1:9461767221891.807.1608732941708:1607756438564;wb_view_log_6762133769=1920*10801;webim_unReadCount=%7B%22time%22%3A1608739784663%2C%22dm_pub_total%22%3A0%2C%22chat_group_client%22%3A0%2C%22chat_group_notice%22%3A0%2C%22allcountNum%22%3A10%2C%22msgbox%22%3A0%7D;";
+        String cookiesStr = "SINAGLOBAL=8065907396593.657.1594058218758;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5KMhUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t;wvr=6;SRF=1609084173;ALF=1640620173;SSOLoginState=1609084173;SCF=AneetFdEbQdzrPjcqxzupwzJub5dDpiV3Eq2fxW6pccnYollQqRy75TBPnqPauOlzAZ0iA1_5dpikOjNWgOmbHw.;SUB=_2A25y7N1dDeRhGeBJ7VAQ8y3LzTWIHXVRmEmVrDV8PUNbmtAKLXnZkW9NRisOapSuaZ3rKuRu6zbCA0jg1FNVr3Do;SRT=D.QqHBJZPuirtoSmMb4cYGS4H1isSB4OYuJrowPEWHNEYd4csEUPSpMERt4EPKRcsrA4kJdFuTTsVuObH9VryYVEisRPfqV!ks4e4-5cHDAOBgSqEFObSpJrM6*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIOdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77;wb_view_log_6762133769=1920*10801;_s_tentry=login.sina.com.cn;UOR=,,login.sina.com.cn;Apache=869356981912.0928.1609084175657;ULV=1609084175740:20:4:1:869356981912.0928.1609084175657:1608732941780;webim_unReadCount=%7B%22time%22%3A1609084180619%2C%22dm_pub_total%22%3A0%2C%22chat_group_client%22%3A0%2C%22chat_group_notice%22%3A0%2C%22allcountNum%22%3A15%2C%22msgbox%22%3A0%7D;";
         String[] cooks = cookiesStr.split(";");
         for (String cs : cooks) {
             if (cs.indexOf("=") != -1) {
@@ -557,6 +557,17 @@ public class WeiboUtilsController {
                             boolean longContentSave = false;
                             Integer other_id = null;
                             String longContentText = null, doubanUrl = null;
+                            Elements WB_media_a = feed_list_content_el.parent().select("ul.WB_media_a");
+                            if (WB_media_a != null) {
+                                Elements WB_media_a_lis = WB_media_a.select("li");
+                                for (Element WB_media_a_li : WB_media_a_lis) {
+                                    if (WB_media_a_li.hasClass(".WB_video")) { //视频
+                                        
+                                    } else if (WB_media_a_li.hasClass(".WB_pic")) { //图片
+                                        
+                                    }
+                                }
+                            }
                             Elements WB_text_opt_els = feed_list_content_el.select("a.WB_text_opt"); //判断是否有长微博被隐藏
                             if (WB_text_opt_els != null && WB_text_opt_els.size() > 0) {
                                 Element WB_text_opt_el = feed_list_content_el.select("a.WB_text_opt").get(0);
