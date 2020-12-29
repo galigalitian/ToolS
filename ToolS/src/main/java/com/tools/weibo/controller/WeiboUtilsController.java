@@ -2,6 +2,7 @@ package com.tools.weibo.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tools.utils.ConnectionUtil;
 
@@ -475,7 +478,7 @@ public class WeiboUtilsController {
     
     private Map<String, String> getCookies() {
         Map<String, String> cookies = Maps.newHashMap();
-        String cookiesStr = "SINAGLOBAL=8065907396593.657.1594058218758;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5KMhUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t;wvr=6;SRF=1609084173;ALF=1640620173;SSOLoginState=1609084173;SCF=AneetFdEbQdzrPjcqxzupwzJub5dDpiV3Eq2fxW6pccnYollQqRy75TBPnqPauOlzAZ0iA1_5dpikOjNWgOmbHw.;SUB=_2A25y7N1dDeRhGeBJ7VAQ8y3LzTWIHXVRmEmVrDV8PUNbmtAKLXnZkW9NRisOapSuaZ3rKuRu6zbCA0jg1FNVr3Do;SRT=D.QqHBJZPuirtoSmMb4cYGS4H1isSB4OYuJrowPEWHNEYd4csEUPSpMERt4EPKRcsrA4kJdFuTTsVuObH9VryYVEisRPfqV!ks4e4-5cHDAOBgSqEFObSpJrM6*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIOdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77;wb_view_log_6762133769=1920*10801;_s_tentry=login.sina.com.cn;UOR=,,login.sina.com.cn;Apache=869356981912.0928.1609084175657;ULV=1609084175740:20:4:1:869356981912.0928.1609084175657:1608732941780;webim_unReadCount=%7B%22time%22%3A1609084180619%2C%22dm_pub_total%22%3A0%2C%22chat_group_client%22%3A0%2C%22chat_group_notice%22%3A0%2C%22allcountNum%22%3A15%2C%22msgbox%22%3A0%7D;";
+        String cookiesStr = "tid=SwrjKODsEYoK/Lgk0bDwu5y1jxGxucecRJZGdrKQhkU=__095;SINAGLOBAL=7215125845365.442.1587363248600;_ga=GA1.2.1285144861.1600155460;ULV=1607326709755:21:1:1:9039805117907.8.1607326709692:1605578565066;UOR=news.ifeng.com,widget.weibo.com,login.sina.com.cn;SCF=AhvVSaDk77uTV8ztYY33KbjXX246ihp-lkdJVKwaRUwlTeYZ9V5Gz3yWTK9L6ZviLEohz8Scz1CfAtjPzSwAuGc.;SUB=_2A25y7rgxDeRhGeBJ7VAQ8y3LzTWIHXVRna75rDV8PUJbmtAKLRj6kW9NRisOamGgNFbgxagAT1OUIrISs7T18uXq;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5K-hUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t;SRT=D.QqHBJZPui3He5mMb4cYGS4H1isSB4OYuJrowPEWHNEYd4cuYiqPpMERt4EP1RcsrA4kJ4cf-TsVuObH9VryYU4WeO!S8S3YYSrE4J4yPNQHH43J3PDmtWPYo*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIIdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77;SRF=1609222241;ALF=1639820326;SSOLoginState=1609222241;wvr=6;wb_view_log_6762133769=1366*7681;";
         String[] cooks = cookiesStr.split(";");
         for (String cs : cooks) {
             if (cs.indexOf("=") != -1) {
@@ -554,17 +557,81 @@ public class WeiboUtilsController {
                         String weiboUname = usercardEl.text();
                         Elements feed_list_content_els = midEl.select("div[node-type=feed_list_content]"); //每一条微博的内容element
                         for (Element feed_list_content_el : feed_list_content_els) { //循环每一条微博
+                            Map<String, Object> weiboMap = Maps.newHashMap();
                             boolean longContentSave = false;
                             Integer other_id = null;
                             String longContentText = null, doubanUrl = null;
                             Elements WB_media_a = feed_list_content_el.parent().select("ul.WB_media_a");
                             if (WB_media_a != null) {
+                                String action_data = WB_media_a.attr("action-data");
+                                System.out.println("================  " + action_data);
+                                if (StringUtils.isNotBlank(action_data)) {
+                                    String[] action_datas = action_data.split("&");
+                                    for (String adata : action_datas) {
+                                        if (adata.indexOf("clear_picSrc=") != -1) { //查找出所有的大图链接
+                                            List<String> largeImageList = Lists.newArrayList();
+                                            adata = adata.replace("clear_picSrc=", "");
+                                            String[] adataArr = adata.split(",");
+                                            for (String ad : adataArr) {
+                                                largeImageList.add(URLDecoder.decode(ad, "utf-8"));
+                                            }
+                                            weiboMap.put("largeImageList", largeImageList);
+                                        }
+                                    }
+                                }
                                 Elements WB_media_a_lis = WB_media_a.select("li");
+                                List<String> smallImageList = Lists.newArrayList();
+                                List<String> gifList = Lists.newArrayList();
+                                List<String> videoList = Lists.newArrayList();
                                 for (Element WB_media_a_li : WB_media_a_lis) {
-                                    if (WB_media_a_li.hasClass(".WB_video")) { //视频
+                                    if (WB_media_a_li.hasClass("WB_video")) { //视频
+                                        String video_action_data = WB_media_a_li.attr("action-data");
+                                        if (StringUtils.isNotBlank(video_action_data)) {
+                                            System.out.println("================  " + video_action_data);
+                                            String[] action_datas = video_action_data.split("&");
+                                            for (String adata : action_datas) {
+                                                if (adata.indexOf("video_src") != -1) {
+                                                    adata = adata.replace("video_src=", "");
+                                                    String[] adataArr = adata.split(",");
+                                                    for (String ad : adataArr) {
+                                                        videoList.add(URLDecoder.decode(ad, "utf-8"));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else if (WB_media_a_li.hasClass("WB_pic")) { //图片
+                                        String gif_action_data = WB_media_a_li.attr("action-data");
+                                        if (StringUtils.isNotBlank(gif_action_data)) {
+                                            System.out.println("================  " + gif_action_data);
+                                            String[] action_datas = gif_action_data.split("&");
+                                            for (String adata : action_datas) {
+                                                if (adata.indexOf("gif_url") != -1) {
+                                                    adata = adata.replace("gif_url=", "");
+                                                    String[] adataArr = adata.split(",");
+                                                    for (String ad : adataArr) {
+                                                        gifList.add(URLDecoder.decode(ad, "utf-8"));
+                                                    }
+                                                }
+                                            }
+                                        }
                                         
-                                    } else if (WB_media_a_li.hasClass(".WB_pic")) { //图片
-                                        
+                                        Elements WB_gif_boxs = WB_media_a_li.select("div.WB_gif_box");
+                                        if (WB_gif_boxs != null && WB_gif_boxs.size() > 0) {
+                                            for (Element WB_gif_box : WB_gif_boxs) {
+                                                if (WB_gif_box.select("img") != null && WB_gif_box.select("img").size() > 0) {
+                                                    Element gif_img = WB_gif_box.select("img").get(0);
+                                                    smallImageList.add(gif_img.attr("src"));
+                                                }
+                                            }
+                                        } else {
+                                            Elements imgEls = WB_media_a_li.select("img");
+                                            for (Element imgEl : imgEls) {
+                                                smallImageList.add(imgEl.attr("src"));
+                                            }
+                                        }
+                                        weiboMap.put("videoList", videoList);
+                                        weiboMap.put("gifList", gifList);
+                                        weiboMap.put("smallImageList", smallImageList); //内容小图
                                     }
                                 }
                             }
@@ -577,8 +644,36 @@ public class WeiboUtilsController {
                                     System.out.println(longContentText);
                                 }
                             } else {
+                                weiboMap.put("content", feed_list_content_el.html());
                                 System.out.println(feed_list_content_el.html());
                             }
+                            System.out.println("===========================  ");
+                            System.out.println(weiboMap.get("content").toString());
+                            if (weiboMap.containsKey("largeImageList")) {
+                                List<String> largeImageList = (List<String>) weiboMap.get("largeImageList");
+                                for (String largeImage : largeImageList) {
+                                    System.out.println("largeImage：" + largeImage);
+                                }
+                            }
+                            if (weiboMap.containsKey("videoList")) {
+                                List<String> videoList = (List<String>) weiboMap.get("videoList");
+                                for (String video : videoList) {
+                                    System.out.println("video：" + video);
+                                }
+                            }
+                            if (weiboMap.containsKey("gifList")) {
+                                List<String> gifList = (List<String>) weiboMap.get("gifList");
+                                for (String gif : gifList) {
+                                    System.out.println("gif：" + gif);
+                                }
+                            }
+                            if (weiboMap.containsKey("smallImageList")) {
+                                List<String> smallImageList = (List<String>) weiboMap.get("smallImageList");
+                                for (String smallImage : smallImageList) {
+                                    System.out.println("smallImage：" + smallImage);
+                                }
+                            }
+                            System.out.println("===========================  ");
                         }
                     }
                 } else {
