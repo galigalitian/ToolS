@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>后台管理系统</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    <link type="text/css" href="../css/cms.css" rel="stylesheet">
+
+  </head>
+  
+  <body>
+    <div>rarbg爬取错误：<br>${rarbgSpiderError}</div>
+    <!-- <div><a href="/errorMovieList">从关联表中找错误电影</a></div> -->
+    <div><a href="/cms/other/getOtherList">下载站电影列表</a></div>
+    <div><a href="/cms/weibo/getWeiboCommentList">微博电影列表</a></div>
+    <div><a href="/cms/movie/getMovieList">线上电影列表</a></div>
+    <div><a href="/cms/douban/getMovieInfoList">豆瓣电影列表</a></div>
+    <div><a href="/cms/subtitle/getSubtitleListByRedis">字幕列表</a></div>
+    <div><a href="/cms/getRecommendList">推荐电影列表</a></div>
+    <div>
+        <p style="color:#666">添加电影和剧集</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/addNewOtherMovie">自动添加下载站电影和剧集</a></p>
+            <p><a href="/cms/spider/index?type=movie">爬取电影和电视剧</a></p>
+            <p><a href="/cms/spider/index?type=douban">爬取豆瓣电影和电视剧</a></p>
+            <p><a href="/cms/weibo/spiderWeiboIndex">爬取微博电影</a></p>
+            <p><a href="/cms/manual/manualInputMovieNew">手动添加电影</a></p>
+        </div>
+    </div>
+    <div>
+        <p style="color:#666">添加字幕</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/spider/index?type=subtitle">爬取字幕</a></p>
+        </div>
+    </div>
+    <div>
+        <p style="color:#666">电影类工具操作</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/movieUtils/updateMovieCover">重新下载封面图片</a></p>
+            <p><a href="/cms/movieUtils/updateMovieRate">更新豆瓣评分为空的电影</a></p>
+            <p><a href="/cms/downloadTitlePrefix/getDownloadTitlePrefixList">下载链接截取字符串列表</a></p>
+            <p><a href="/cms/downloadGroupNamePrefix/getDownloadGroupNamePrefixList">下载链接分组名称截取列表</a></p>
+        </div>
+        <p style="color:#666">索引类工具操作</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/luceneUtils/createIndex">重新创建索引</a></p>
+            <p><a href="/cms/luceneUtils/createIndex?create_type=add">新增索引</a></p>
+            <p><a href="/cms/luceneUtils/createMoreIndex">重新创建详细页更多电影索引</a></p>
+            <p><a href="/cms/luceneUtils/addWordDic">新增数据库字典数据</a></p>
+            <p><a href="/cms/luceneUtils/createWordDicFile">重新创建字典文件</a></p>
+        </div>
+        <p style="color:#666">网站类工具操作</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/createHtml/createIndexHtml">生成首页</a></p>
+            <p><a href="/cms/setup/get">通用设置</a></p>
+        </div>
+        <p style="color:#666">cookies工具操作</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/cookiesUtils/updateDoubanCookies">修改豆瓣登录cookies</a></p>
+            <p><a href="/cms/cookiesUtils/updateRarbgCookies">修改rarbg's cookies</a></p>
+            <!-- <p><a href="/cms/cookiesUtils/updateAliCookies">修改ali's cookies</a></p> -->
+            <p><a href="/cms/cookiesUtils/updateTorrCookies">修改torr's cookies</a></p>
+            <p><a href="/cms/cookiesUtils/updateZimuzuCookies">修改zumuzu's cookies</a></p>
+            <p><a href="/cms/cookiesUtils/updateWeiboCookies">修改weibo's cookies</a></p>
+        </div>
+        <p style="color:#666">豆瓣相关工具操作</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/cookiesUtils/updateDoubanCookies">爬取豆瓣最新电影</a></p>
+        </div>
+    </div>
+    
+    <div>
+        <p style="color:#666">微博相关</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/weibo/saveWeiboUser">保存有资源的微博用户</a></p>
+            <p><a href="/cms/weibo/getWeiboUserList">获得所有有资源的微博用户</a></p>
+        </div>
+    </div>
+    
+    <!-- <div><a href="/cms/addNewMovie">添加豆瓣电影</a></div> -->
+    <div>
+        <p style="color:#666">系列电影</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/addSeries">添加系列电影</a></p>
+            <p><a href="/cms/getSeriesList">系列电影列表</a></p>
+        </div>
+    </div>
+    <div>
+        <p style="color:#666">点击榜管理</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/top/today">今日点击榜</a></p>
+            <p><a href="/cms/top/week">本周点击榜</a></p>
+            <p><a href="/cms/top/all">所有点击榜</a></p>
+        </div>
+    </div>
+    <div>
+        <p style="color:#666">广告</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/adsense/addAdSense">添加广告</a></p>
+            <p><a href="/cms/adsense/getAdSenseListPage">广告列表</a></p>
+        </div>
+    </div>
+    <div>
+        <p style="color:#666">日志</p>
+        <div style="margin-left:20px">
+            <p><a href="/cms/log/nginx">过滤nginx日志</a></p>
+        </div>
+    </div>
+    <div><a href="/cms/downloadUtils/parseUrlToDownload">127.0.0.1解析链接</a></div>
+  </body>
+</html>

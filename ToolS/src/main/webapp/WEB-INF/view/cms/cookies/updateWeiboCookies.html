@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>更新weibo's cookies</title>
+
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link href="../../css/movie.css" rel="stylesheet">
+    <link href="../../css/cms.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container main content">
+        <div class="page-header">
+	        <ol class="break-crumbs">
+	          <li><a href="/cms" title="">返回首页</a></li>
+	          <li><a href="/cms/cookiesUtils/updateWeiboCookies">更新weibo's cookies</a></li>
+	        </ol>
+      	</div>
+        <form class="form-horizontal" action="/cms/cookiesUtils/updateWeiboCookies" method="post">
+        <div class="form-group">
+          <!-- Text input-->
+          <label class="col-sm-2" for="input01">cookies</label>
+          <div class="col-sm-10">
+            <textarea placeholder="placeholder" name="cookiesStr" class="form-control original_html big-textarea"><#if (weiboCookiesMap.cookiesStr)??>${weiboCookiesMap.cookiesStr}</#if></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <!-- Text input-->
+          <label class="col-sm-2" for="input01">修改时间</label>
+          <div class="col-sm-10">
+            <span>${weiboCookiesMap.updateTime}</span>
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">修改</button>
+            </div>
+        </div>
+        </form>
+        <div class="info">
+	        <div class="form-group info-row upload-file">
+	        <form id="uploadCookiesForm" class="form-horizontal" action="/cms/upload/uploadWeiboCookiesFile" method="post" enctype="multipart/form-data">
+	          <input name="uploadWeiboCookiesFile" type="file" readonly="readonly"><div class="save-btn margin-left-70"><a href="javascript:;" id="upload_weibo_cookies">上传cookies文件</a></div>
+	        </form>
+	        </div>
+        </div>
+    </div>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/form.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+        	/* 上传微博cookies文件 */
+        	$('#upload_weibo_cookies').click(function() {
+        		$('#uploadCookiesForm').ajaxSubmit({
+                    success: function(msg) {
+                    	if (msg != '') {
+                    		$('textarea[name=cookiesStr]').val(msg);
+                    		alert('上传成功');
+                    	} else alert('上传失败');
+                    }
+                });
+        	});
+        });
+    </script>
+  </body>
+</html>
