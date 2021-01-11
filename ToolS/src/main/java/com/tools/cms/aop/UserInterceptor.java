@@ -25,14 +25,8 @@ public class UserInterceptor {
     @Autowired
     private SessionManager sessionManager;
     
-    @Pointcut("execution(* com.movie.cms.CmsAddOtherMovieController.*(..)) ||" +
-    		"execution(* com.movie.cms.CmsController.*(..)) ||" +
-    		"execution(* com.movie.cms.douban.CmsDoubanMovieController.*(..)) ||" +
-    		"execution(* com.movie.cms.CmsLuceneIndexController.*(..)) ||" +
-    		"execution(* com.movie.cms.CmsMovieController.*(..)) ||" +
-    		"execution(* com.movie.cms.CmsOtherMovieListController.*(..)) ||" +
-    		"execution(* com.movie.cms.CmsOtherTvController.*(..)) ||" +
-    		"execution(* com.movie.cms.SelErrorMovieController.*(..))")
+    @Pointcut("execution(* com.tools.weibo.controller.WeiboUtilsController.*(..)) ||" +
+            "execution(* com.tools.cms.CmsController.*(..))")
     public void loginSession() {}
     
     /**

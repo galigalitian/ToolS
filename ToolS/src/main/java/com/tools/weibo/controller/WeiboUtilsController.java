@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -30,11 +32,22 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.tools.common.ListPage;
+import com.tools.model.WeiboUser;
 import com.tools.utils.ConnectionUtil;
 
 @Component
@@ -992,5 +1005,103 @@ public class WeiboUtilsController {
 
     public static char[] encodeHex(final byte[] data) {
         return encodeHex(data, true);
+    }
+    
+    
+    /**
+     * 获得所有有资源的微博用户名称或id列表
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/getWeiboUserList")
+    public String getWeiboUserList(HttpServletRequest request, ModelMap modelMap) {
+        /*String orderCol = request.getParameter("orderCol");
+        String order = request.getParameter("order");*/
+        Query query = new Query();
+        int p = request.getParameter("p") != null ? Integer.parseInt(request.getParameter("p")) - 1 : 0;
+        int firstRow = p * 30;
+        int rowNum = 30;
+        Sort sort = Sort.by(Direction.DESC, "update_time");
+        Pageable pageable = PageRequest.of(p, 30, sort);
+        
+        long allRow = mongoTemplate.count(query, WeiboUser.class);
+        List<WeiboUser> weiboUserList = mongoTemplate.find(query.with(pageable), WeiboUser.class);
+        ListPage<WeiboUser> listPage = new ListPage<WeiboUser>(weiboUserList, firstRow, rowNum,
+                new Long(allRow).intValue());
+        modelMap.addAttribute("weiboUserListPage", listPage);
+        modelMap.addAttribute("p", p);
+        modelMap.addAttribute("rowNum", rowNum);
+        return "/cms/weibo/getWeiboUserList";
+    }
+    
+    /**
+     * 获得所有需要爬取的微博用户名称或id列表
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/getWeiboUserSpiderList")
+    public String getWeiboUserSpiderList(ModelMap modelMap) {
+        return "/cms/weibo/getWeiboUserSpiderList";
+    }
+    
+    /**
+     * 保存有资源的微博用户名称或id
+     */
+    @RequestMapping("/saveWeiboUser")
+    public String saveWeiboUser(String userStr, String userUrl, String batchUserStr) {
+        if (StringUtils.isNotBlank(batchUserStr)) {
+            String[] userStrs = batchUserStr.split("\r\n");
+            
+            Map<String, String> userMap = new HashMap<String, String>();
+            String key = null;
+            for (String uStr : userStrs) {
+                if (uStr.indexOf("http") != -1 || uStr.indexOf("https") != -1) {
+                    //System.out.println(key + "   " + uStr);
+                    userMap.put(key, uStr);
+                } else {
+                    key = uStr;
+                }
+            }
+            
+            userMap.forEach((k, v) -> {
+                saveWeiboUserOp(k, v);
+            });
+            return "redirect:/cms/weibo/getWeiboUserList";
+        }
+        if (StringUtils.isNotBlank(userStr) && StringUtils.isNotBlank(userUrl)) {
+            saveWeiboUserOp(userStr, userUrl);
+            return "redirect:/cms/weibo/getWeiboUserList";
+        }
+        
+        return "/cms/weibo/saveWeiboUser";
+    }
+    
+    private void saveWeiboUserOp(String userStr, String userUrl) {
+        WeiboUser hasWeiboUser = mongoTemplate.findOne(new Query(Criteria.where("userUrl").is(userUrl)), WeiboUser.class);
+        if (hasWeiboUser != null) {
+            Update update = new Update();
+            update.set("userStr", userStr);
+            update.set("userUrl", userUrl);
+            update.set("update_time", new Date());
+            mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(hasWeiboUser.getId())), update, WeiboUser.class);
+        } else {
+            WeiboUser weiboUsercls = new WeiboUser();
+            weiboUsercls.setCreate_time(new Date());
+            weiboUsercls.setIsSpider(1);
+            weiboUsercls.setStatus(1);
+            weiboUsercls.setUpdate_time(new Date());
+            weiboUsercls.setUserStr(userStr);
+            weiboUsercls.setUserUrl(userUrl);
+            mongoTemplate.save(weiboUsercls);
+        }
+    }
+    
+    /**
+     * 保存需要爬取的微博用户
+     * @param weiboUser
+     */
+    @RequestMapping("/saveWeiboUserSpider")
+    public String saveWeiboUserSpider(String weiboUser) {
+        return "/cms/weibo/saveWeiboUserSpider";
     }
 }

@@ -1,0 +1,238 @@
+ul{margin:0;padding:0}
+li{list-style:none;}
+label{font-weight:normal;margin:0;vertical-align: middle;}
+p{margin:0;padding:0}
+.cms-main{width:1224px;}
+.op{margin-bottom:10px}
+.form-control{width:50%}
+.select{display:inline;}
+.crawl_douban{float:left}
+textarea.original_html{height:80px;width:400px}
+textarea.big-textarea{height:300px;width:500px}
+textarea.title{height:52px;width:400px}
+.tab-pane{margin-top:10px}
+.gray-line{padding:0 0 10px 0;border-top:1px solid #ccc;}
+
+.float-left{float:left}
+.in-tr div{float:left;}
+.table>tbody.tbody-1{border-top:0px;border-bottom:1px solid #ccc}
+.table>tbody.tbody-1>tr{background-color:#f9f9f;word-wrap:break-word;word-break:break-all;}
+.table>tbody.tbody-1>tr>td{padding-bottom:5px}
+
+.table-striped>tbody.tbody-1>tr:nth-of-type(even)>td{border:0}
+.table-striped>tbody.tbody-1>tr:nth-of-type(odd)>td{border:0}
+
+.table-striped>tbody.tbody-1>tr:nth-of-type(odd){background-color:#fff}
+.table-striped>tbody.tbody-1:nth-of-type(odd)>tr:nth-of-type(odd){background-color:#f9f9f9}
+.table-striped>tbody.tbody-1:nth-of-type(odd){background-color:#f9f9f9}
+
+/*搜索电影开始*/
+.other-movie-search,.douban-search,.torrent-search, .other-movie-searchByIMDB, .other-movie-searchByDouban, .douban-searchByIMDB{margin-right:10px}
+.search-result-ul li{float:left;margin:0 5px 10px 0;text-align:center;/* cursor:pointer; */width:90px;height:170px}
+.search-result-ul li .result-img-div{position:relative;}
+.search-result-ul li span.d_rate{position:absolute;bottom:3px;right:3px;background: rgba(87, 162, 64, 0.9) !important;
+padding: 2px 4px 1px 4px;color: #fff;border-radius:2px;font-size:1.3rem;font-weight:500}
+.search-result-ul li span.download-count{position:absolute;top:3px;left:3px;background: rgb(221,57,21, 0.9) !important;
+padding: 2px 4px 1px 4px;color: #fff;border-right-radius:2px;font-size:1.3rem;font-weight:500}
+.search-result-ul li span.other-download-count{top:3px;left:3px;background: rgb(221,57,21, 0.9) !important;
+padding: 2px 4px 1px 4px;color: #fff;border-right-radius:2px;font-size:1.3rem;font-weight:500}
+
+/* .search-result-ul li:hover p{color:#dd3915} */
+.search-result-ul li img{width:80px;}
+.search-result-ul li.selected{border:1px solid #dd3915;}
+.search-result-ul li.selected p{color:#dd3915}
+.search-result-ul .mask-div{filter:alpha(Opacity=80);-moz-opacity:0.5;opacity: 0.8;z-index:100;background-color:#000;width:90px;height:120px;position:absolute;top:0;left:0;color:#fff;display:none}
+.search-result-ul .mask-div .bp{width:40px;height:40px;background-color:#dd3915;position:relative;left:25px;border-radius:30px;cursor:pointer;text-align:center;vertical-align:middle;}
+.search-result-ul .mask-div .open-url{top:10px;}
+.search-result-ul .mask-div .open-url a{color:#fff;text-decoration:none;}
+.search-result-ul .mask-div .sel-ok{top:30px;}
+.search-result-ul .mask-div .bp i{line-height:20px;font-size:16px;position:relative;top:10px}
+/* .search-result-ul .mask-div a.open-url{position:relative;top:50px;color:#fff}
+.search-result-ul .mask-div a.open-url:hover{text-decoration:none;} */
+
+.explain{margin-bottom:10px}
+.explain .span-color{width:20px;height:15px;display:inline-block;margin-right:5px}
+.explain .span-red{background-color:#dd3915;}
+.explain .span-green{background-color:#57A240;}
+/*搜索电影结束*/
+
+div.other-download-modal .modal-dialog{margin-top:30px;width:795px}
+.other-download-modal .modal-content{width:820px;margin:0 auto}
+.modifyOtherDownloadForm textarea.big-textarea{height:200px;width:600px}
+
+.show-iframe-html{margin-bottom:20px}
+.iframe-from-group{margin:0}
+.iframe-col{width:1014px;padding:0 0 0 65px}
+.iframe-html{width:1014px;height:1000px;border:none;}
+
+.crawl_url_label{margin-right:10px}
+
+/*手动添加电影*/
+.modal-body{overflow:auto;max-height:800px}
+.download-url-type{margin-right:20px}
+textarea.manual-other-about{height: 131px; width: 398px;}
+
+.content .conver-img{margin:0 20px 10px 0;background-color:#f0f0f0;width:300px;height:450px;position:relative;cursor:pointer;}
+.content .conver-img .conver-img-add{position:absolute;top:150px;left:110px;text-align:center;}
+.content .conver-img .conver-img-add .icon-add:after{content:"\271A";font-size:80px}
+
+.content .conver-img img{width:300px;}
+/*.content .conver-img img{max-width:660px}*/
+
+.content .info{float: left;width:800px;line-height:1.9em}
+.content .info-w{width:100%}
+.content .info .info-row{margin-bottom:0.6em}
+
+.content .width-600{width:600px}
+
+/* .content .info .tv-info-row{display:none} */
+.content .info .info-row .sel-model{color:#0099CC}
+.content .info .text{display:inline-block;width:220px}
+.content .info .text60{width:60px}
+.content .info .text90{width:90px}
+.content .info .text300{width:300px}
+.content .info .text400{width:400px}
+.content .info .text500{width:500px}
+.content .info .text200{width:200px}
+.content .info .text255{width:255px}
+.content .info .text155{width:155px}
+.content .info .textarea-max{width:100%}
+
+.content .info .margin-right-0{margin-right:0}
+.content .info .margin-right-10{margin-right:10px}
+.content .info .margin-left-1{margin-left:1px}
+.content .info .margin-left-5{margin-left:5px}
+.content .info .margin-left-10{margin-left:10px}
+.content .info .margin-left-20{margin-left:20px}
+.content .info .margin-left-40{margin-left:40px}
+.content .info .margin-left-70{margin-left:70px}
+.content .margin-top-20{margin-top:20px}
+.margin-bottom-10{margin-bottom:10px}
+.content .padding-top-5{padding-top:5px}
+.content .padding-left-10{padding-left:10px}
+.content .padding-right-10{padding-right:10px}
+
+.content .download{width: 660px}
+.content .download .download-add,
+.content .download .subtitle-add{margin-left:30px;font-size:14px}
+
+/*.content .info{width: 660px;line-height:1.9em}*/
+.content .info h1{font-size: 18px;color:#111;margin-top:0;display:inline;}
+.content .info div.info-p{margin:0}
+.content .info div.info-p a{color:#222}
+.content .info div.info-p a.font-red{color:#dd3915;background-color:#fff;border-radius:2px;text-align:center;padding:.3em .4em .3em;text-decoration:none;}
+.content .info div.info-p a.font-red:hover{color:#fff;background-color:#dd3915}
+
+
+.content .info div.info-p a:hover{color:#dd3915}
+.content .info span{color:#666}
+.content .info span.font-red{color:#dd3915}
+.content .info div.sl{float:left;min-width:165px;margin:0 5px 0 0}
+.content .info .search-ul li{float: left;margin-left:8px}
+.content .info .search-ul button{border:none;padding:0;margin-top:-3px}
+.content .info .search-ul li input[type=radio]{vertical-align:middle;margin:0}
+.content .info .other-search-div{display:none}
+.content .info .upload-file{margin-bottom:10px;padding-bottom:10px;border-bottom:1px dashed #ccc}
+.content .info .upload-file input{display:inline-block;}
+
+.download-ul{padding:0;}
+.download-ul li{list-style-type:none;padding-bottom:5px;border-bottom: 1px solid #eee;margin-bottom: 10px;padding-left:5px}
+.download-ul li .download-title-row{/*float:left;*/word-wrap:break-word;word-break:break-all;padding-left:5px}
+.download-ul li a.mius-download-a:hover, .download-ul li a.edit-download-a:hover{text-decoration:none;}
+
+/* .download-ul li .download-btn{float:right;} */
+
+.tv-download-ul li{margin-bottom:0;padding:5px 0}
+.tv-download-ul li .checkbox{padding-left:5px}
+.tv-download-ul .batch-download{margin-left:10px}
+.tv-download-ul .batch-download a{margin-left:3px}
+.checkbox label{line-height:normal;}
+.tv-download-ul li:hover{background-color:#eee;}
+.download-ul li .tv-download-title{float:left;}
+.download-ul li .tv-download-btn{float:right;}
+
+.download-btn li{float:left}
+.download-ul li .download-btn a{margin-right:5px;padding:3px 5px;color: #fff;background-color: #dd3915}
+/*.segm > a + a::before{content:'/';padding:0 3px;color: #ccc}*/
+.download-ul li.last{border-bottom:none;}
+.download-ul div.download-title{padding-left:0;}
+.download-ul .download-title .cms-checkbox{float:left;margin-right:10px;cursor:pointer;margin-top:10px;vertical-align:middle;}
+.download-ul .download-title .cms-sub-checkbox{float:left;margin-right:10px;cursor:pointer;}
+.download-ul .download-title .invalid, .download-ul .download-title .sub-invalid{color:#FF0033;float:left;margin:5px 5px 0 0;vertical-align:middle;}
+.download-ul .download-title .sub-invalid{margin-top:0}
+.download-ul .download-title .invalid-txt{border:1px solid #FF0033}
+.download-ul .download-title .valid, .download-ul .download-title .sub-valid{color:#CCFFFF;float:left;margin:5px 5px 0 0;vertical-align:middle;}
+.download-ul .download-title .sub-valid{margin-top:0;}
+.download-ul .download-title .valid-txt{border:1px solid #CCFFFF}
+
+.download-ul .download-title .delete{color:#1befaa;float:left;margin:5px 5px 0 0;vertical-align:middle;}
+.download-ul .download-title .delete-txt{border:1px solid #1befaa}
+
+.download-ul .download-title .subtitle_des{color:#0099FF;margin-right:5px}
+.download-ul .group-name-li{background-color:#dfdfdf;}
+.download-ul .online-txt{background-color:#bc79ff}
+.download-ul .group-name-li label{font-weight:800;}
+.download-ul .group-name-li .group-all-sel{margin-top:4px;}
+.download-ul .group-name-li .link-num{color:#FF0033;cursor:pointer;}
+.download-ul .group-name-li .put-span{cursor:pointer;}
+.download-ul .group-name-li .put-span i{font-style:normal;}
+
+.checkbox-i{vertical-align:middle;display:inline-block;}
+input.url-checkbox{vertical-align:top;margin-top:0.5em}
+@media (max-width: 695px) {
+    input.url-checkbox{margin-top:0.3em}
+}
+
+.modal-header{padding:15px 15px 0 15px;border:none;}
+.modal-header ul.order{margin-bottom:0}
+.modal-body .download-txt-list{width:100%;height:40em;resize:none;border:none}
+.modal-footer{border:none;}
+
+.content .info .download-info{padding-top:10px;margin-top:20px;border-top: 1px solid #ccc;}
+.content .info .download-info .download-info-row{}
+
+.content .info .download-info .download-torrent-type .upload-torrent{display:inline-block;}
+.content .info .download-info .download-torrent-type #upload_form{display:inline-block;}
+
+.content .info .download-info .download-titles-ul{padding-left:0;margin-bottom:0;width:680px}
+.content .info .download-info .download-titles-ul li.download-titles-li{border-bottom: 1px dotted #ccc;margin:10px 0}
+.content .info .download-info .download-urls-ul{display:inline-block;padding-left:3px;margin-bottom:0}
+.content .info .download-info .download-urls-ul li{margin-bottom:0.6em}
+.content .info .download-info .download-urls-ul li a{font-size:18px}
+.content .info .download-info .download-urls-ul li a:hover{text-decoration:none;}
+/* .add-download-url-a */
+/*搜索其他电影的下载链接，例如：磁力猫等*/
+.search-other-div{overflow:auto;max-height:400px}
+.search-other-selCount{float:left}
+.search-other-selCount span.selCount{color:#0099FF}
+.search-other-sort{float:right;padding:0 15px}
+.search-other-sort li:first-child{border-left: 1px solid #dfdfdf}
+.search-other-sort li:last-child{border-right: 1px solid #dfdfdf}
+.search-other-sort li{border-top: 1px solid #dfdfdf;border-bottom: 1px solid #dfdfdf;color:#999;float:left;padding:3px 15px;cursor: pointer;}
+.search-other-sort li.active{background:rgba(37, 141, 205, 0.05);color:#258dcd;border:1px solid #258dcd}
+
+.search-other-ul{}
+.search-other-ul li .icon-magnet{color:#dd3915;margin:0 5px}
+.search-other-ul li .icon-inbox{color:#00a9e1;margin:0 5px}
+.search-other-ul li span{margin:0 5px}
+.search-other-ul li:nth-child(even){background-color: #f3f2f2}
+.search-other-ul li .title-name{display:inline-block;margin-right:5px}
+.search-other-ul li.selected{color:#dd3915}
+/*搜索其他电影的下载链接，例如：磁力猫等*/
+
+/*手动添加电影*/
+
+/*保存按钮样式*/
+.save-btn, .big-btn{display:inline-block;}
+.big-btn{height:40px}
+.save-btn a, .big-btn a{margin-right:5px;padding:3px 5px;color: #fff;background-color: #dd3915}
+.big-btn a{padding:13px 40px}
+/*保存按钮样式*/
+
+/*通用设置*/
+.setup .info-row span{text-align:right;display:inline-block;width:150px;margin-right:10px}
+
+input.checked_align{display: inline-block;vertical-align: middle;margin-bottom: 2px;margin-top:0}
+
+.conver-img-container{float:left}
+.conver-img-container .conver-img-op{text-align:center}

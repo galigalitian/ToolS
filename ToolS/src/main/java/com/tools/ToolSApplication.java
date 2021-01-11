@@ -40,7 +40,7 @@ public class ToolSApplication {
         return DataSourceBuilder.create().type(com.mchange.v2.c3p0.ComboPooledDataSource.class).build();
     }
     
-    @Bean
+/*    @Bean
     @ConfigurationProperties(prefix="mybatis")
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -53,7 +53,7 @@ public class ToolSApplication {
 //        configuration.setMapUnderscoreToCamelCase(false);
 //        sqlSessionFactoryBean.setConfiguration(configuration);
         return sqlSessionFactoryBean.getObject();
-    }
+    }*/
     
     @Bean
     public PlatformTransactionManager platformTransactionManager() {
