@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <div>
+        <textarea id="contentTT" style="float:left"></textarea>
+        <ul style="float:left">
+            <li></li>
+        </ul>
+    </div>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/form.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $('#contentTT').change(function() {
+        	var $this = $(this);
+        	alert($this.text());
+        	/*$.ajax({
+        		url: '/cms/story/search',
+        		method: 'get',
+        		data: {'q': $this.text()}
+        	});*/
+        })
+    </script>
+</body>
+</html>

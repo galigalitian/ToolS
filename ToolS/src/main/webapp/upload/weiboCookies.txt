@@ -1,0 +1,25 @@
+# HTTP Cookie File downloaded with cookies.txt by Genuinous @genuinous
+# This file can be used by wget, curl, aria2c and other standard compliant tools.
+# Usage Examples:
+#   1) wget -x --load-cookies cookies.txt "https://weibo.com/u/6762133769/home?wvr=5"
+#   2) curl --cookie cookies.txt "https://weibo.com/u/6762133769/home?wvr=5"
+#   3) aria2c --load-cookies cookies.txt "https://weibo.com/u/6762133769/home?wvr=5"
+#
+passport.weibo.com	FALSE	/visitor	FALSE	1630912613	tid	SwrjKODsEYoK/Lgk0bDwu5y1jxGxucecRJZGdrKQhkU=__095
+.weibo.com	TRUE	/	FALSE	1902723248	SINAGLOBAL	7215125845365.442.1587363248600
+.weibo.com	TRUE	/	FALSE	1663227498	_ga	GA1.2.1285144861.1600155460
+.weibo.com	TRUE	/	FALSE	1641892482	UOR	news.ifeng.com,widget.weibo.com,login.sina.com.cn
+.weibo.com	TRUE	/	TRUE	1641892477	SUBP	0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5KMhUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t
+.weibo.com	TRUE	/	FALSE	1610508330	wvr	6
+.weibo.com	TRUE	/	TRUE	1641892476	ALF	1641892476
+.weibo.com	TRUE	/	TRUE	0	SSOLoginState	1610356476
+.weibo.com	TRUE	/	TRUE	1925716477	SCF	AhvVSaDk77uTV8ztYY33KbjXX246ihp-lkdJVKwaRUwlFG1Ul_oYxdibG20vLtzxnmfFEjvxMPcb8mrKEB8C_1g.
+.weibo.com	TRUE	/	TRUE	0	SUB	_2A25y-GatDeRhGeBJ7VAQ8y3LzTWIHXVRjN9lrDV8PUNbmtAKLWb2kW9NRisOagRjgcZ6EI2iHA2p3CMP0ThJe_qr
+.passport.weibo.com	TRUE	/	TRUE	1925716477	SRT	D.QqHBJZPuI4WYWmMb4cYGS4H1isSB4OYuJrowPEWHNEYd4c9KKdopMERt4EPKRcsrA4kJP-zpTsVuObH9VryYSsHgS-iTi!PHJcbzAOHnJrii4DB4Tm9bQ3Ep*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIOdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77
+.passport.weibo.com	TRUE	/	TRUE	1925716477	SRF	1610356477
+weibo.com	FALSE	/	FALSE	1610380602	wb_view_log_6762133769	1366*7681
+.weibo.com	TRUE	/	FALSE	0	_s_tentry	login.sina.com.cn
+.weibo.com	TRUE	/	FALSE	0	Apache	5319849778622.154.1610356482383
+.weibo.com	TRUE	/	FALSE	1641460482	ULV	1610356482494:24:2:1:5319849778622.154.1610356482383:1609903840537
+web.im.weibo.com	FALSE	/	FALSE	0	BAYEUX_BROWSER	37e9-1nh35so690hxdkjscp1qdb1l
+.weibo.com	TRUE	/	FALSE	1610442934	webim_unReadCount	%7B%22time%22%3A1610356534637%2C%22dm_pub_total%22%3A0%2C%22chat_group_client%22%3A0%2C%22chat_group_notice%22%3A0%2C%22allcountNum%22%3A0%2C%22msgbox%22%3A-1%7D

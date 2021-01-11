@@ -33,12 +33,18 @@ import com.tools.es.dao.ChapterContentPartRepository;
 import com.tools.es.vo.ChapterContentPartEsVo;
 
 @RestController
+@RequestMapping("/story")
 public class ChapterContentController {
     private static String regex = "：|:|“|”|\\\"|。|\\.|？|\\?|、|，|,|！|!|@|#|￥|%|\\&|\\$|……|\\*|\\^|（|）|\\(|\\)|-|\\+|=|\\~|`|·|[|]|【|】|《|》|<|\\>|\\/|\\\\|｛|｝|\\{|\\}|\\|";
     @Autowired
     private ChapterContentPartRepository chapterContentPartRepository;
     @Autowired
     private RestHighLevelClient client;
+    
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public String index() {
+        return "chapterContent";
+    }
     
     @RequestMapping(path = "/addContent", method = RequestMethod.GET)
     public void addContent() {
