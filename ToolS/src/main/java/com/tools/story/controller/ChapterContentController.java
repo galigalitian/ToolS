@@ -1,10 +1,8 @@
 package com.tools.story.controller;
 
-import java.awt.print.Book;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
@@ -16,6 +14,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -57,21 +56,29 @@ public class ChapterContentController {
             while ((line = bufferedReader.readLine()) != null) {
                 n++;
                 String lineArr[] = line.split(regex);
-                List<ChapterContentPartEsVo> contentVoList = Lists.newArrayList();
                 for (String str : lineArr) {
                     if (StringUtils.isNotBlank(str)) {
                         str = str.replaceAll("\\s*", "");
                         if (str.length() > 1) {
-                            search(str, false);
+                            //search(str, false);
                             ChapterContentPartEsVo chapterContentPartEsVo = new ChapterContentPartEsVo();
-                            chapterContentPartEsVo.setContent(str.replaceAll("\\s*", ""));
+                            String content = str.replaceAll("\\s*", "");
+                            chapterContentPartEsVo.setContent(content);
                             chapterContentPartEsVo.setCreateTime(System.currentTimeMillis());
-                            contentVoList.add(chapterContentPartEsVo);
+                            
+                            GetIndexRequest indexRequest = new GetIndexRequest("tools");
+                            boolean exists = client.indices().exists(indexRequest, RequestOptions.DEFAULT);
+                            int count = 0;
+                            if (exists) {
+                                List<ChapterContentPartEsVo> chapterContentPartEsVoList = chapterContentPartRepository.findByContent(content);
+                                count = chapterContentPartEsVoList.size();
+                            }
+                            if (count == 0)
+                                chapterContentPartRepository.save(chapterContentPartEsVo);
                         }
                     }
                 }
-                chapterContentPartRepository.saveAll(contentVoList);
-                if (n > 100) break;
+                if (n > 10000) break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +94,7 @@ public class ChapterContentController {
         try {
             String keyword = "";
             if (isKeyword) keyword = ".keyword";
-            sourceBuilder.query(QueryBuilders.termQuery("content" + keyword, URLDecoder.decode(q, "utf-8"))).from(0).size(1000);
+            sourceBuilder.query(QueryBuilders.termQuery("content" + keyword, URLDecoder.decode(q, "utf-8"))).from(0).size(100);
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
@@ -96,12 +103,11 @@ public class ChapterContentController {
         try {
             SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
             SearchHits hits = response.getHits();
-            System.out.println(hits.getTotalHits());
             for (SearchHit hit : hits.getHits()) {
                 Map<String, Object> sourceMap = hit.getSourceAsMap();
                 resultMap.add(sourceMap);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return resultMap;
@@ -109,9 +115,8 @@ public class ChapterContentController {
     
     @ResponseBody
     @GetMapping("/search")
-    public List<Book> testSearch(@RequestParam String q) {
-        search(q, false);
-        return null;
+    public List<Map<String, Object>> testSearch(@RequestParam String q) {
+        return search(q, false);
     }
     
     public static void main(String args[]) {
