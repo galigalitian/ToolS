@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="../../css/movie.css" rel="stylesheet">
 </head>
 <body>
     <div>
@@ -15,14 +16,19 @@
     <script src="../js/form.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script type="text/javascript">
-        $('#contentTT').change(function() {
+        $('#contentTT').on('input propertychange', function() {
         	var $this = $(this);
-        	alert($this.text());
-        	/*$.ajax({
-        		url: '/cms/story/search',
+        	$.ajax({
+        		url: '/story/search',
         		method: 'get',
-        		data: {'q': $this.text()}
-        	});*/
+        		data: {'q': '我'},
+        		success: function(msg) {
+        			//var objArr = JSON.parse(msg);
+        			for (var i = 0; i < msg.length; i++) {
+        			    alert(msg[i].content);
+        			}
+        		}
+        	});
         })
     </script>
 </body>
