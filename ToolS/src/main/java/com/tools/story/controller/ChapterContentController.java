@@ -53,10 +53,14 @@ public class ChapterContentController {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("d:\\chapterContent.txt")));
             String line = null;
             int n = 0;
+            GetIndexRequest indexRequest = new GetIndexRequest("tools");
+            boolean exists = false;
             while ((line = bufferedReader.readLine()) != null) {
-                n++;
+                if (!exists)
+                    exists = client.indices().exists(indexRequest, RequestOptions.DEFAULT);
                 String lineArr[] = line.split(regex);
                 for (String str : lineArr) {
+                    n++;
                     if (StringUtils.isNotBlank(str)) {
                         str = str.replaceAll("\\s*", "");
                         if (str.length() > 1) {
@@ -65,9 +69,6 @@ public class ChapterContentController {
                             String content = str.replaceAll("\\s*", "");
                             chapterContentPartEsVo.setContent(content);
                             chapterContentPartEsVo.setCreateTime(System.currentTimeMillis());
-                            
-                            GetIndexRequest indexRequest = new GetIndexRequest("tools");
-                            boolean exists = client.indices().exists(indexRequest, RequestOptions.DEFAULT);
                             int count = 0;
                             if (exists) {
                                 List<ChapterContentPartEsVo> chapterContentPartEsVoList = chapterContentPartRepository.findByContent(content);
@@ -76,6 +77,7 @@ public class ChapterContentController {
                             if (count == 0)
                                 chapterContentPartRepository.save(chapterContentPartEsVo);
                         }
+                        if (n > 10000) break;
                     }
                 }
                 if (n > 10000) break;
