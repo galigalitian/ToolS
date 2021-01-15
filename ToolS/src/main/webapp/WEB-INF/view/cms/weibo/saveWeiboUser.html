@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>保存有资源的微博用户</title>
+
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link href="../../css/movie.css" rel="stylesheet">
+    <link href="../../css/cms.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container main">
+      <div class="page-header">
+        <ol class="break-crumbs">
+          <li><a href="/cms" title="">返回首页</a></li>
+          <li><a href="">保存有资源的微博用户</a></li>
+        </ol>
+      </div>
+      
+      <div class="content clearfix">
+	      <div class="info download spider-movie">
+		      <div class="page-header need-header">
+		        <h2>保存有资源的微博用户</h2>
+		      </div>
+		      <form id="saveWeiboUserForm" action="/cms/weibo/saveWeiboUser" method="post">
+              <div class="info">
+                <div class="info-row">
+                  <span>微博用户：</span>
+                  <input type="text" name="userStr" class="form-control text">
+                </div>
+              </div>
+              <div class="info">
+                <div class="info-row">
+                  <span>微博链接：</span>
+                  <input type="text" name="userUrl" class="form-control text">
+                </div>
+              </div>
+              <div class="info">
+                  <ul class="download-btn clearfix margin-left-70">
+                      <li>
+                          <div class="save-btn">
+                              <a data-url="/cms/weibo/saveWeiboUser" href="javascript:;" title="保存有资源的微博用户名" id="saveWeiboUser">保存有资源的微博用户名</a>
+                          </div>
+                      </li>
+                      <!-- <li class="margin-left-5">
+                          <a data-url="" crawl_type="all" href="javascript:;" title="爬取所有电影" id="">爬取所有电影</a>
+                      </li> -->
+                  </ul>
+              </div>
+              </form>
+		  </div>
+		  <div class="info download spider-movie">
+              <div class="page-header need-header">
+                <h2>批量保存有资源的微博用户</h2>
+              </div>
+              <form id="batchSaveWeiboUserForm" action="/cms/weibo/saveWeiboUser" method="post">
+              <div class="info">
+                <div class="info-row">
+                  <span>微博用户：</span>
+                  <textarea name="batchUserStr" class="form-control text" style="margin: 0px; height: 360px; width: 580px;"></textarea>
+                </div>
+              </div>
+              <div class="info">
+                  <ul class="download-btn clearfix margin-left-70">
+                      <li>
+                          <div class="save-btn">
+                              <a data-url="/cms/weibo/saveWeiboUser" href="javascript:;" title="保存有资源的微博用户名" id="batchSaveWeiboUser">保存有资源的微博用户名</a>
+                          </div>
+                      </li>
+                      <!-- <li class="margin-left-5">
+                          <a data-url="" crawl_type="all" href="javascript:;" title="爬取所有电影" id="">爬取所有电影</a>
+                      </li> -->
+                  </ul>
+              </div>
+              </form>
+          </div>
+      	  <div class="info gray-line margin-top-20"></div>
+      </div>
+    </div>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/form.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/cms.js"></script>
+    <script type="text/javascript">
+        $(function() {
+        	$('textarea[name=batchUserStr]').change(function() {
+        		var $this = $(this);
+        		var texts = $this.val().split('\n');
+        		var arr = new Array();
+        		for (var i = 0; i < texts.length; i++) {
+        			var tx = texts[i];
+        			if (tx.indexOf("http") != -1 || tx.indexOf("https") != -1) {
+        				if (tx.indexOf('?') != -1) {
+        				    var url = tx.substring(0, tx.indexOf('?'));
+        			        arr.push(url);
+        				} else
+        					arr.push(tx);
+        			} else {
+        				arr.push(tx);
+        			}
+        		}
+        		var txt = arr.join('\n');
+        		$this.val(txt);
+        	});
+        	$('#saveWeiboUser').click(function() {
+        		$('#saveWeiboUserForm').submit();
+        	});
+        	$('#batchSaveWeiboUser').click(function() {
+        		$('#batchSaveWeiboUserForm').submit();
+        	})
+        })
+    </script>
+  </body>
+</html>

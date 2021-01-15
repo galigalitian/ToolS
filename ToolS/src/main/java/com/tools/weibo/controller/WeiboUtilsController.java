@@ -40,7 +40,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -50,7 +50,8 @@ import com.tools.common.ListPage;
 import com.tools.model.WeiboUser;
 import com.tools.utils.ConnectionUtil;
 
-@Component
+@Controller
+@RequestMapping("/cms/weibo")
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class WeiboUtilsController {
