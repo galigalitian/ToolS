@@ -51,13 +51,13 @@ public class ChapterContentController {
     @ResponseBody
     @RequestMapping(path = "/addContent", method = RequestMethod.GET)
     public void addContent() {
+        List<ChapterContentPartEsVo> addList = Lists.newArrayList();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("d:\\chapterContent.txt")));
             String line = null;
             int n = 0;
             GetIndexRequest indexRequest = new GetIndexRequest("tools");
             boolean exists = false;
-            
             HashSet<String> contentSet = Sets.newHashSet();
             while ((line = bufferedReader.readLine()) != null) {
                 if (!exists)
@@ -69,27 +69,28 @@ public class ChapterContentController {
                         str = str.replaceAll("\\s*", "");
                         if (str.length() > 1) {
                             //search(str, false);
-                            ChapterContentPartEsVo chapterContentPartEsVo = new ChapterContentPartEsVo();
                             String content = str.replaceAll("\\s*", "");
-                            chapterContentPartEsVo.setContent(content);
-                            chapterContentPartEsVo.setCreateTime(System.currentTimeMillis());
                             int count = 0;
                             if (exists) {
                                 List<ChapterContentPartEsVo> chapterContentPartEsVoList = chapterContentPartRepository.findByContent(content);
                                 count = chapterContentPartEsVoList.size();
                             }
-                            if (count == 0)
-                                chapterContentPartRepository.save(chapterContentPartEsVo);
+                            if (count == 0 && contentSet.add(content)) {
+                                ChapterContentPartEsVo chapterContentPartEsVo = new ChapterContentPartEsVo();
+                                chapterContentPartEsVo.setContent(content);
+                                chapterContentPartEsVo.setCreateTime(System.currentTimeMillis());
+                                addList.add(chapterContentPartEsVo);
+                            }
                         }
-                        if (n > 10000) break;
+                        if (contentSet.size() > 10000) break;
                     }
                 }
-                if (n > 10000) break;
+                if (contentSet.size() > 10000) break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //chapterContentPartRepository.save(entity);
+        chapterContentPartRepository.saveAll(addList);
     }
     
     private List<Map<String, Object>> search(String q, boolean isKeyword) {
