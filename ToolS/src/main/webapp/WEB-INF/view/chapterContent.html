@@ -8,7 +8,7 @@
 <body>
     <div>
         <textarea id="contentTT" style="float:left"></textarea>
-        <ul style="float:left">
+        <ul style="float:left" id="contentUl">
             <li></li>
         </ul>
     </div>
@@ -21,12 +21,14 @@
         	$.ajax({
         		url: '/story/search',
         		method: 'get',
-        		data: {'q': '我'},
+        		data: {'q': $('#contentTT').val()},
         		success: function(msg) {
         			//var objArr = JSON.parse(msg);
+        			var liHtml = '';
         			for (var i = 0; i < msg.length; i++) {
-        			    alert(msg[i].content);
+        			    liHtml = liHtml + '<li>' + msg[i].content + '</li>';
         			}
+        			$('#contentUl').html(liHtml);
         		}
         	});
         })

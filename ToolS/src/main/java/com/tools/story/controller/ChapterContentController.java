@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.tools.es.dao.ChapterContentPartRepository;
 import com.tools.es.vo.ChapterContentPartEsVo;
 
@@ -39,7 +41,7 @@ public class ChapterContentController {
     @Autowired
     private ChapterContentPartRepository chapterContentPartRepository;
     @Autowired
-    private RestHighLevelClient client;
+    private RestHighLevelClient restHighLevelClient;
     
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String index() {
@@ -55,9 +57,11 @@ public class ChapterContentController {
             int n = 0;
             GetIndexRequest indexRequest = new GetIndexRequest("tools");
             boolean exists = false;
+            
+            HashSet<String> contentSet = Sets.newHashSet();
             while ((line = bufferedReader.readLine()) != null) {
                 if (!exists)
-                    exists = client.indices().exists(indexRequest, RequestOptions.DEFAULT);
+                    exists = restHighLevelClient.indices().exists(indexRequest, RequestOptions.DEFAULT);
                 String lineArr[] = line.split(regex);
                 for (String str : lineArr) {
                     n++;
@@ -96,6 +100,7 @@ public class ChapterContentController {
         try {
             String keyword = "";
             if (isKeyword) keyword = ".keyword";
+            System.out.println(q);
             sourceBuilder.query(QueryBuilders.termQuery("content" + keyword, URLDecoder.decode(q, "utf-8"))).from(0).size(100);
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
@@ -103,7 +108,7 @@ public class ChapterContentController {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         searchRequest.source(sourceBuilder);
         try {
-            SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             SearchHits hits = response.getHits();
             for (SearchHit hit : hits.getHits()) {
                 Map<String, Object> sourceMap = hit.getSourceAsMap();
