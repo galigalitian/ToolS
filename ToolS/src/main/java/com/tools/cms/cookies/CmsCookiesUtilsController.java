@@ -240,7 +240,8 @@ public class CmsCookiesUtilsController {
             } else {
                 String cookiesJson = findCookiesMap.get("cookiesJson");
                 jsonObj = new JSONObject(cookiesJson);
-                cookiesStr = jsonObj.get("cookies") + "";
+                if (jsonObj.has("cookies"))
+                    cookiesStr = jsonObj.get("cookies") + "";
             }
         } else {
             Map<String, String> saveMap = new HashMap<String, String>();
@@ -286,7 +287,7 @@ public class CmsCookiesUtilsController {
         if (findCookiesMap != null && !findCookiesMap.isEmpty()) {
             String cookiesJson = findCookiesMap.get("cookiesJson").toString();
             JSONObject jsonObj = new JSONObject(cookiesJson);
-            String cookiesStr = jsonObj.get("cookies") + "";
+            String cookiesStr = jsonObj.has("cookies") ? jsonObj.get("cookies") + "" : "";
             String updateTime = findCookiesMap.containsKey("updateTime") ? findCookiesMap.get("updateTime").toString() : null;
             if (StringUtils.isNotEmpty(updateTime))
                 resultMap.put("updateTime", DateUtils.convertDateTimeToString(new Date(Long.parseLong(updateTime))));
