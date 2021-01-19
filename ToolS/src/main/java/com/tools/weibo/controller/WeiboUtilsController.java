@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.tools.cms.cookies.CmsCookiesUtilsController;
 import com.tools.common.ListPage;
 import com.tools.model.WeiboUser;
 import com.tools.utils.ConnectionUtil;
@@ -55,6 +56,8 @@ import com.tools.utils.ConnectionUtil;
 public class WeiboUtilsController {
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private CmsCookiesUtilsController cmsCookiesUtilsController;
     
     private static String mblogUrl = "https://weibo.com/p/aj/v6/mblog/mbloglist?ajwvr=6"
             + "&profile_ftype=1&is_all=1&pl_name=&script_uri=&feed_type=0&__rnd=";
@@ -150,7 +153,7 @@ public class WeiboUtilsController {
     }
     
     private Map<String, String> getCookies() {
-        Map<String, String> cookies = Maps.newHashMap();
+        /*Map<String, String> cookies = Maps.newHashMap();
         String cookiesStr = "tid=SwrjKODsEYoK/Lgk0bDwu5y1jxGxucecRJZGdrKQhkU=__095;SINAGLOBAL=7215125845365.442.1587363248600;_ga=GA1.2.1285144861.1600155460;ULV=1607326709755:21:1:1:9039805117907.8.1607326709692:1605578565066;UOR=news.ifeng.com,widget.weibo.com,login.sina.com.cn;SCF=AhvVSaDk77uTV8ztYY33KbjXX246ihp-lkdJVKwaRUwlTeYZ9V5Gz3yWTK9L6ZviLEohz8Scz1CfAtjPzSwAuGc.;SUB=_2A25y7rgxDeRhGeBJ7VAQ8y3LzTWIHXVRna75rDV8PUJbmtAKLRj6kW9NRisOamGgNFbgxagAT1OUIrISs7T18uXq;SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWfNmU2el7DUf_geNmOZpOA5JpX5K-hUgL.FoqNSozpe0eNSo.2dJLoIEMpehnLxK-L12qLBoMLxKqL1heL1h-LxKqL122LBK-LxKMLB-zL1K.t;SRT=D.QqHBJZPui3He5mMb4cYGS4H1isSB4OYuJrowPEWHNEYd4cuYiqPpMERt4EP1RcsrA4kJ4cf-TsVuObH9VryYU4WeO!S8S3YYSrE4J4yPNQHH43J3PDmtWPYo*B.vAflW-P9Rc0lR-yk!DvnJqiQVbiRVPBtS!r3JZPQVqbgVdWiMZ4siOzu4DbmKPWQS!ukPOHbUDWmPdSaS-PKU4yTVmyBi49ndDPIIdYPSrnlMcyoObi65eBbJFPK4-0lJcM1OFyHM4snSdYlOGYII4noJeEJAcyiOGYIV4noTFPJJdXkOGYIV4noJZHJA!jkOGYIO4oCIQ9JJ4jlWv77;SRF=1609222241;ALF=1639820326;SSOLoginState=1609222241;wvr=6;wb_view_log_6762133769=1366*7681;";
         String[] cooks = cookiesStr.split(";");
         for (String cs : cooks) {
@@ -159,11 +162,17 @@ public class WeiboUtilsController {
                 String val = cs.split("=")[1].trim();
                 cookies.put(key, val);
             }
-        }
+        }*/
+        Map<String, String> cookies = cmsCookiesUtilsController.getWeiboCookies();
         return cookies;
     }
     
-    private void startSpider() throws Exception {
+    /**
+     * 爬取微博用户内容
+     * @throws Exception
+     */
+    @RequestMapping("/spider")
+    public void startSpider() throws Exception {
         String userUrl = "https://weibo.com/u/5857314727";
         Map<String, String> cookiesMap = getCookies();
         String jointStr = getPageInfo(cookiesMap, userUrl);
