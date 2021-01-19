@@ -101,8 +101,7 @@ public class ChapterContentController {
         try {
             String keyword = "";
             if (isKeyword) keyword = ".keyword";
-            System.out.println(q);
-            sourceBuilder.query(QueryBuilders.termQuery("content" + keyword, URLDecoder.decode(q, "utf-8"))).from(0).size(100);
+            sourceBuilder.query(QueryBuilders.multiMatchQuery(URLDecoder.decode(q, "utf-8"), "content" + keyword)).from(0).size(100);
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
@@ -127,31 +126,4 @@ public class ChapterContentController {
         return search(q, false);
     }
     
-    public static void main(String args[]) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("d:\\chapterContent.txt")));
-            String line = null;
-            StringBuffer strBuffer = new StringBuffer();
-            while ((line = bufferedReader.readLine()) != null) {
-                String lineArr[] = line.split(regex);
-                List<ChapterContentPartEsVo> contentVoList = Lists.newArrayList();
-                for (String str : lineArr) {
-                    if (StringUtils.isNotBlank(str) && str.length() > 1) {
-                        ChapterContentPartEsVo chapterContentPartEsVo = new ChapterContentPartEsVo();
-                        chapterContentPartEsVo.setContent(str);
-                        chapterContentPartEsVo.setCreateTime(System.currentTimeMillis());
-                        contentVoList.add(chapterContentPartEsVo);
-                    }
-                }
-                //strBuffer.append(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        /*String aa = "听到我的这番话，刘娣的心情这才|算有些好转，她指着|我的脑袋，道：“如果有什么{问题}，我拿你是问！”";
-        String aas[] = aa.split("：|:|“|”|\\\"|。|\\.|？|\\?|，|,|！|!|@|#|￥|%|\\&|\\$|……|\\*|\\^|（|）|\\(|\\)|-|\\+|=|\\~|`|·|[|]|【|】|《|》|<|\\>|\\/|\\\\|｛|｝|\\{|\\}|\\|");
-        for (String a : aas) {
-            System.out.println(a);
-        }*/
-    }
 }
