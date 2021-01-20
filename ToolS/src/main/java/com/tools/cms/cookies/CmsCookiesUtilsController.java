@@ -304,7 +304,7 @@ public class CmsCookiesUtilsController {
         if (findCookiesMap != null && !findCookiesMap.isEmpty()) {
             String cookiesJson = findCookiesMap.get("cookiesJson");
             JSONObject jsonObj = new JSONObject(cookiesJson);
-            String cookiesStr = jsonObj.get("cookies") + "";
+            String cookiesStr = jsonObj.has("cookies") ? jsonObj.get("cookies") + "" : "";
             String[] cooks = cookiesStr.split(";");
             for (String cs : cooks) {
                 if (cs.indexOf("=") != -1) {

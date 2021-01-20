@@ -1,0 +1,58 @@
+<#macro paging listPage action params urlpath includeParams="get">
+<#if !urlpath??>
+    <#local urlpath = "" />
+</#if>
+<#if !params??>
+    <#local params = "" />
+</#if>
+
+<#if (listPage.listPage)??>
+<div class="row pagination-row">
+    <#if listPage.page != 0 && listPage.page != 1>
+    <ul class="pagination">
+      <#if (listPage.firstRow + 1) gt 0 && listPage.currPage gt 1>
+      <li>
+        <a href="${action}${urlpath}/${listPage.currPage-1}/<#if params != ''>?${params}</#if>">
+        <span aria-label="Pre">上一页</span>
+        </a>
+      </li>
+      </#if>
+    
+      <#local start = 1 />
+      ==${listPage.currPage}==
+      <#if listPage.currPage gt 2>
+      <#local start = listPage.currPage - 3 />
+      <li><a href="${action}${urlpath}/1/<#if params != ''>?${params}</#if>">1</a></li>
+      <li><a href="${action}${urlpath}/2/<#if params != ''>?${params}</#if>">2</a></li>
+      <li><a href="${action}${urlpath}/3/<#if params != ''>?${params}</#if>">3</a></li>
+      <li><a>&hellip;</a></li>
+      </#if>
+      
+      <#local end = listPage.currPage + 1 />
+      <#if end gt listPage.page>
+      <#local end = listPage.page />
+      </#if>
+      <#list start..end as x>
+        <#if x == listPage.currPage>
+        <li class="active"><a href="${action}${urlpath}/${x}/<#if params != ''>?${params}</#if>">${x}</a></li>
+        <#else>
+        <li><a href="${action}${urlpath}/${x}/<#if params != ''>?${params}</#if>">${x}</a></li>
+        </#if>
+      </#list>
+      <#if end lte (listPage.page - 2)>
+        <li><a>&hellip;</a></li>
+      </#if>
+      <#if end lt (listPage.page - 1)>
+        <li><a href="${action}${urlpath}/${listPage.page - 1}/<#if params != ''>?${params}</#if>">${listPage.page - 1}</a></li>
+      </#if>
+      <#if end lt listPage.page>
+        <li><a href="${action}${urlpath}/${listPage.page}/<#if params != ''>?${params}</#if>">${listPage.page}</a></li>
+      </#if>
+      <#if listPage.currPage lt listPage.page>
+      <li><a href="${action}${urlpath}/${listPage.currPage+1}/<#if params != ''>?${params}</#if>" aria-label="Next">下一页</a></li>
+      </#if>
+    </ul>
+    </#if>
+</div>
+</#if>
+</#macro>

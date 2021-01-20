@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>爬取微博信息</title>
+
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link href="../../css/movie.css" rel="stylesheet">
+    <link href="../../css/cms.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container main">
+      <div class="page-header">
+        <ol class="break-crumbs">
+          <li><a href="/cms" title="">返回首页</a></li>
+          <li><a href="">爬取微博信息</a></li>
+        </ol>
+      </div>
+      
+      <div class="content clearfix">
+          <div class="info download spider-movie">
+              <div class="page-header need-header">
+                <h2>微博信息爬取</h2>
+              </div>
+              <div class="info">
+                <!-- <div class="info-row">
+                  <span>爬取排序：</span>
+                  <select class="form-control text sel-spider-sort">
+                      <option value="R">最新上映</option>
+                      <option value="U">近期热门</option>
+                      <option value="T">标记最多</option>
+                      <option value="S">评分最高</option>
+                  </select>
+                  <input type="hidden" name="spider_sort" value="R">
+                </div> -->
+              </div>
+              <div class="">
+                  <div class="info">
+                    <div class="info-row">
+                      <span>爬取页数：</span>
+                      <input type="text" name="page_num" class="form-control text" value="3">
+                    </div>
+                  </div>
+                  <div class="info">
+                      <ul class="download-btn clearfix margin-left-70">
+                          <li>
+                              <div class="douban-save-btn">
+                                  <a data-url="/cms/weibo/spiderWeibo" href="javascript:;" title="爬取微博信息" id="spiderWeibo">爬取微博信息</a>
+                              </div>
+                          </li>
+                          <!-- <li class="margin-left-5">
+                              <a data-url="" crawl_type="all" href="javascript:;" title="爬取所有电影" id="">爬取所有电影</a>
+                          </li> -->
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="info gray-line margin-top-20"></div>
+      </div>
+    </div>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/form.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/cms.js"></script>
+    <script type="text/javascript">
+         $(function () {
+        	 $('#spiderWeibo').click(function() {
+        		 var $this = $(this);
+                 var before_html = $this.html();
+        		 var dataUrl = $this.attr('data-url');
+                 var page_num = $('input[name=page_num]').val();
+                 $this.html('正在爬取...');
+        		 $.ajax({
+        			 url: '/cms/weibo/spider',
+        			 data: {'pageNum': page_num},
+        			 type: 'post',
+                     success: function(msg) {
+                    	 if (msg == 'noCookies') {
+                    		 alert('先上传微博登录cookies文件');
+                    	 }
+                         $this.html(before_html);
+                     }
+        		 })
+        	 });
+         })
+    </script>
+  </body>
+</html>

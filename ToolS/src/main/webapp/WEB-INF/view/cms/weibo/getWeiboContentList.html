@@ -1,0 +1,216 @@
+<#import "/common/cmsPage.html" as page>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>微博列表</title>
+
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link href="../../css/movie.css" rel="stylesheet">
+    <link href="../../css/cms.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <#assign homeDomain = "http://www.yikedy.co">
+    <input type="hidden" value="${homeDomain}" id="homeDomain">
+    <div class="container cms-main" style="width:auto">
+      <div class="page-header">
+        <ol class="break-crumbs">
+          <li><a href="/cms" title="">返回首页</a></li>
+          <li>电影列表</li>
+        </ol>
+      </div>
+        <div class="content op clearfix">
+            <div class="info info-w">
+                <div class="sl">
+                    <div class="info-row">
+                    <#--<select class="form-control text text155 sel-weibo-user">
+                        <option value="" data-href="/cms/weibo/getWeiboContentList">选择微博用户</option>
+                        <#list weiboUserList as weiboUser>
+                        <option data-href="/cms/weibo/getWeiboContentList?userId=${weiboUser.id}" value="${weiboUser.id}" <#if userId?? && (userId == weiboUser.id)>selected="selected"</#if>>${weiboUser.userStr}</option>
+                        </#list>
+                    </select>-->
+                    </div>
+                </div>
+                <div class="sl">
+                    <#--<div class="info-row">
+                        <input class="form-control text" type="text" name="searchQuery" id="" value="${searchQuery}" placeholder="搜索内容">
+                    </div>-->
+                </div>
+                <div class="sl padding-top-5">
+                    <a id="searchBtn" href="javascript:;" class="padding-left-10 padding-right-10">搜索</a>
+                </div>
+            </div>
+        </div>
+        
+        <#assign param = "">
+        <#if userId??>
+        <#if param != "">
+        <#assign param = param + "&" />
+        </#if>
+        <#assign param = param + "userId=" + userId />
+        </#if>
+        <#if orderCol??>
+        <#if param != ''>
+        <#assign param = param + '&'>
+        </#if>
+        <#assign param = param + "orderCol=" + orderCol>
+        </#if>
+        <#if order??>
+        <#if param != ''>
+        <#assign param = param + '&'>
+        </#if>
+        <#assign param = param + "order=" + order>
+        </#if>
+    
+        <#assign order_create_time = "desc">
+        <#if orderCol?? && orderCol == 'create_time' && order??>
+        <#if order == 'desc'>
+        <#assign order_create_time = "asc">
+        <#elseif order == 'asc'>
+        <#assign order_create_time = "desc">
+        </#if>
+        </#if>
+    
+        <#assign order_update_time = "desc">
+        <#if orderCol?? && orderCol == 'update_time' && order??>
+        <#if order == 'desc'>
+        <#assign order_update_time = "asc">
+        <#elseif order == 'asc'>
+        <#assign order_update_time = "desc">
+        </#if>
+        </#if>
+        
+        <#assign order_weibo_time = "desc">
+        <#if orderCol?? && orderCol == 'weiboDetailTime' && order??>
+        <#if order == 'desc'>
+        <#assign order_weibo_time = "asc">
+        <#elseif order == 'asc'>
+        <#assign order_weibo_time = "desc">
+        </#if>
+        </#if>
+        <table class="table table-striped">
+            <tr>
+                <td style="width:80px"><label><input type="checkbox" id="allSel">全选</label></td>
+                <td style="width:180px">用户名</td>
+                <td style="width:160px">微博用户id</td>
+                <td style="width:130px">是否已添加</td>
+                <td style="width:150px"><a order="${order_weibo_time}" orderCol="weiboDetailTime" class="order_time" href="javascript:;">原文时间<i class="<#if order_weibo_time == 'asc'>icon-caret-up<#elseif order_weibo_time == 'desc'>icon-caret-down<#else>icon-sort</#if>"></i></a></td>
+                <td style="width:150px"><a order="${order_create_time}" orderCol="create_time" class="order_time" href="javascript:;">创建时间<i class="<#if order_create_time == 'asc'>icon-caret-up<#elseif order_create_time == 'desc'>icon-caret-down<#else>icon-sort</#if>"></i></a></td>
+                <td style="width:150px"><a order="${order_update_time}" orderCol="update_time" class="order_time" href="javascript:;">更新时间<i class="<#if order_update_time == 'asc'>icon-caret-up<#elseif order_update_time == 'desc'>icon-caret-down<#else>icon-sort</#if>"></i></a></td>
+                <td>操作</td>
+            </tr>
+            <#list weiboContentListPage.listPage as weiboContentList>
+            <tbody class="tbody-1" <#if (weiboContentList.isAdd)?? && weiboContentList.isAdd == 1>style="color:#39e0f1"</#if>>
+            <tr>
+                <td><label><input type="checkbox" cid="${weiboContentList.id}"></label></td>
+                <td><a href="${weiboContentList.userStr}" target="_blank">${weiboContentList.weiboUname}</a></td>
+                <td><a href="${weiboContentList.userStr}" target="_blank">${weiboContentList.weiboUid}</a></td>
+                <td><#if weiboContentList.isAdd == 0>未添加<#elseif weiboContentList.isAdd == 1>已添加</#if></td>
+                <td><#if (weiboContentList.weiboDetailTime)??>${(weiboContentList.weiboDetailTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.weiboDetailTime?datetime)?string('HH:mm:ss')}</#if></td>
+                <td><#if (weiboContentList.createTime)??>${(weiboContentList.createTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.createTime?datetime)?string('HH:mm:ss')}</#if></td>
+                <td><#if (weiboContentList.updateTime)??>${(weiboContentList.updateTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.updateTime?datetime)?string('HH:mm:ss')}</#if></td>
+                <td>
+                    <a class="edit-other" target="_blank" href="/cms/manual/manualInputMovieNew?weiboCid=${weiboContentList.id}<#if (weiboContentList.doubanUrl)??>&douban_url=${weiboContentList.doubanUrl}</#if>">新增电影</a>&nbsp;|&nbsp;
+                    <a class="" target="_blank" href="https://weibo.com<#if (weiboContentList.weiboDetailUrl)??>${weiboContentList.weiboDetailUrl}<#else>javascript:;</#if>">微博原文</a>&nbsp;|&nbsp;
+                    <a class="del-weibo" href="javascript:;" weiboContentId="${weiboContentList.id}">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8"><div style="width:80%">${weiboContentList.content}</div></td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <ul>
+                        <li></li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+            </#list>
+        </table>
+    </div>
+    <@page.paging listPage=weiboContentListPage action="" params=param urlpath="" />
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/zTree/jquery.ztree.core.js"></script>
+    <script src="../../js/form.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('.sel-weibo-user').change(function() {
+                var $this = $(this);
+                window.location.href = $this.find("option:selected").attr('data-href');
+            });
+            $('.del-weibo').click(function() {
+                var weiboCommentId = $(this).attr('weiboCommentId');
+                var $this = $(this);
+                $this.html('正在删除...');
+                $.ajax({
+                	url: '/cms/weibo/deleteWeiboComment',
+                	data: {'id': weiboCommentId},
+                	succcess: function() {
+                		window.location.reload();
+                	}
+                })
+            });
+            $('.sel-isAdd').change(function() {
+            	goSelUrl();
+            })
+            $('.order_time').click(function() {
+                var param = getSelParam();
+                var homeDomain = $('#homeDomain').val();
+                var dataHref = '/cms/weibo/getWeiboCommentList' + (param != '' ? '?' + param : '');
+                var orderCol = $(this).attr('orderCol');
+                var order = $(this).attr('order');
+                if (dataHref.indexOf('?') != -1) {
+                    dataHref = dataHref + '&orderCol=' + orderCol + '&order=' + order;
+                } else {
+                    dataHref = dataHref + '?orderCol=' + orderCol + '&order=' + order;
+                }
+                window.location.href = homeDomain + dataHref;
+            });
+            
+            $('#searchBtn').click(function() {
+            	
+            	var searchQuery = $('input[name=searchQuery]').val();
+            	window.location.href = '/cms/weibo/getWeiboCommentList?searchQuery=' + searchQuery;
+            })
+        });
+        
+        function goSelUrl() {
+            var param = getSelParam();
+            var homeDomain = $('#homeDomain').val();
+            window.location.href = '/cms/weibo/getWeiboCommentList' + (param != '' ? '?' + param : '');
+        }
+        function getSelParam() {
+            var sel_weibo_user = $('.sel-weibo-user').val();
+            var sel_isAdd = $('.sel-isAdd').val();
+            
+            var param = '';
+            if (sel_weibo_user != '') {
+                if (param != '')
+                    param = param + '&';
+                param = param + 'userId=' + sel_weibo_user;
+            }
+            if (sel_isAdd != '') {
+                if (param != '')
+                    param = param + '&';
+                param = param + 'isAdd=' + sel_isAdd;
+            }
+            return param;
+        }
+    </script>
+  </body>
+</html>

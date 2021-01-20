@@ -1,0 +1,74 @@
+<#macro paging listPage action params urlpath includeParams="get">
+<#if !urlpath??>
+    <#local urlpath = "" />
+</#if>
+<#if !params??>
+    <#local params = "" />
+</#if>
+
+<#if (listPage.listPage)??>
+<#assign listPageNum = 100>
+<#--<#if listPage.page lt listPageNum>-->
+<#assign listPageNum = listPage.page>
+<#--</#if>-->
+<div class="row pagination-row">
+    <#if listPage.page != 0 && listPage.page != 1>
+    <ul class="pagination">
+      <#if (listPage.firstRow + 1) gt 0 && listPage.currPage gt 1>
+      <li>
+        <a href="${action}${urlpath}/${(listPage.currPage-1)?c}/<#if params != ''>?${params}</#if>">
+        <span aria-label="Pre">上一页</span>
+        </a>
+      </li>
+      </#if>
+      <#local start = 1 />
+      <#if listPage.currPage gt 5>
+      <#local start = listPage.currPage - 1 />
+      <li><a href="${action}${urlpath}/1/<#if params != ''>?${params}</#if>">1</a></li>
+      <li><a href="${action}${urlpath}/2/<#if params != ''>?${params}</#if>">2</a></li>
+      <li><a>&hellip;</a></li>
+      </#if>
+      
+      <#local end = listPage.currPage + 1 />
+      <#if end gt listPageNum>
+      <#local end = listPageNum />
+      </#if>
+      <#list start..end as x>
+        <#if x == listPage.currPage>
+        <li class="active"><a href="${action}${urlpath}/${x?c}/<#if params != ''>?${params}</#if>">${x?c}</a></li>
+        <#else>
+        <li><a href="${action}${urlpath}/${x?c}/<#if params != ''>?${params}</#if>">${x?c}</a></li>
+        </#if>
+      </#list>
+      <#if end lte (listPageNum - 2)>
+        <li><a>&hellip;</a></li>
+      </#if>
+      <#if end lt (listPageNum - 1)>
+        <li><a href="${action}${urlpath}/${(listPageNum - 1)?c}/<#if params != ''>?${params}</#if>">${(listPageNum - 1)?c}</a></li>
+      </#if>
+      <#if end lt listPageNum>
+        <li><a href="${action}${urlpath}/${listPageNum?c}/<#if params != ''>?${params}</#if>">${listPageNum?c}</a></li>
+      </#if>
+      <#if listPage.currPage lt listPageNum>
+      <li><a href="${action}${urlpath}/${(listPage.currPage+1)?c}/<#if params != ''>?${params}</#if>" aria-label="Next">下一页</a></li>
+      </#if>
+    </ul>
+    <ul class="pagination">
+    <li><input type="text" class="go-page" /><a href="javascript:;" class="go">跳转</a></li>
+    </ul>
+    <script type="text/javascript">
+        $('.go').click(function() {
+        	var page = $('.go-page').val();
+        	var param = '${params}';
+        	var url = '${action}${urlpath}/';
+        	if (page != '' && !isNaN(page)) {
+        		url = url + page + '/';
+        	}
+        	url = url + (param != '' ? '?' + param : '');
+        	window.location.href = url;
+        });
+    </script>
+    </#if>
+</div>
+</#if>
+</#macro>

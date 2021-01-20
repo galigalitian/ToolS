@@ -1,0 +1,130 @@
+<#macro page title="" keywords="" description="">
+<#global homeDomain="http://127.0.0.1:8099" />
+<#global imgDomain="http://www.yikedy.co" />
+<#assign sdescription = "一刻电影是一个电影交流平台，是电影爱好者们的电影天堂，BT天堂，提供最新最全的电影，电视，动漫，剧情片，恐怖片，喜剧片等影视资源迅雷下载，一刻电影提供迅雷，电驴，磁力BT种子等多种下载方式，以及720P，1080P，BD，HD，rmb，MP4，MKV等各种高清超清多种格式资源下载"/>
+<#assign skeywords = "2018最新电影,高清电影,电影下载,电视剧下载,动画下载,迅雷下载,mp4电影下载,高清电影下载,电影天堂,BT电影下载,手机电影下载,一刻电影下载">
+<#if description?? && description != ''>
+<#assign sdescription = description/>
+</#if>
+<#if keywords?? && keywords != ''>
+<#assign skeywords = keywords>
+</#if>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=yes, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="baidu-site-verification" content="kAyCSFVK2Q" />
+    <meta name="google-site-verification" content="Ntl4my9wpo3rgX3oKY-5nW9WvSYYt73Kn2nM2Ahtpww" />
+    <meta name="msvalidate.01" content="5024D54B7E5258F3EDA9F9E3ADE231BF" />
+    <meta content="${skeywords}" name="keywords" />
+    <meta content="${sdescription}" name="description" />
+    <title><#if title?? && title != ''>${title}<#else>一刻电影_最新电影下载_BT下载_高清电影下载_迅雷下载</#if></title>
+
+    <!-- Bootstrap -->
+    <link href="${homeDomain}/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="${homeDomain}/css/font-awesome.min.css">
+    <link href="${homeDomain}/css/fonts/iconfont.css" rel="stylesheet">
+    <link href="${homeDomain}/css/movie.css" rel="stylesheet">
+    <link href="${homeDomain}/favicon.ico" type=/image/x-icon rel=icon />
+    <link href="${homeDomain}/favicon.ico" type=/image/x-icon rel="shortcut icon" />
+    <script src="${homeDomain}/js/jquery.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<!-- Start Alexa Certify Javascript -->
+	<script type="text/javascript">
+	_atrk_opts = { atrk_acct:"KXRpt1rcy520uW", domain:"yikedy.co",dynamic: true};
+	(function() { var as = document.createElement('script'); as.type = 'text/javascript'; as.async = true; as.src = "https://certify-js.alexametrics.com/atrk.js"; var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(as, s); })();
+	</script>
+	<noscript><img src="https://certify.alexametrics.com/atrk.gif?account=KXRpt1rcy520uW" style="display:none" height="1" width="1" alt="" /></noscript>
+	<!-- End Alexa Certify Javascript -->  
+  </head>
+  <body>
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="${homeDomain}">一刻电影</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li <#if nav == "index">class="active"</#if>><a href="${homeDomain}">首页</a></li>
+              <li <#if nav == "movie">class="active"</#if>><a href="${homeDomain}/movie/">最新电影</a></li>
+              <li <#if nav == "tv">class="active"</#if>><a href="${homeDomain}/tv/">最新电视</a></li>
+              <li <#if nav == "cartoon">class="active"</#if>><a href="${homeDomain}/cartoon/">最新动画</a></li>
+              <li <#if nav == "china">class="active"</#if>><a href="${homeDomain}/category/90001/">国产</a></li>
+              <li <#if nav == "rihan">class="active"</#if>><a href="${homeDomain}/category/30001/">日韩</a></li>
+              <li <#if nav == "oumei">class="active"</#if>><a href="${homeDomain}/category/50001/">欧美</a></li>
+              <li <#if nav == "series">class="active"</#if>><a href="${homeDomain}/series/">合集</a></li>
+              <#--<li <#if nav == "ask">class="active"</#if>><a href="${homeDomain}/ask/">求片区</a></li>-->
+              <!-- <li class="show-search"><form class="min-search-form"><input class="min-search-input" type="text"><i class="icon-search min-search-btn"></i></form></li> -->
+            </ul>
+            
+            
+          </div><!--/.nav-collapse -->
+          <form class="navbar-form navbar-left search-form" action="/search">
+              <div class="form-group">
+                <input name="query" type="text" class="form-control search-text" placeholder="搜索影片，导演或演员">
+              </div>
+              <button type="submit" class="btn btn-default search-btn">搜索</button>
+            </form>
+        </div>
+    </nav>
+    
+    <div class="container main">
+      <#nested>
+      <ul class="foot">
+        <li><a href="${homeDomain}/about/">关于一刻电影</a></li>
+        <li><a href="${homeDomain}/disclaimer/">免责声明</a></li>
+        <li><a href="${homeDomain}/ask/">求片专区</a></li>
+        <!-- <li><a href="#">下载说明</a></li> -->
+        <li><a href="${homeDomain}/contact/">联系我们</a></li>
+      </ul>
+      <ul class="foot" style="border-top:none">
+        <li>一刻电影仅为电影爱好者交流学习所用，本网站资源均来源于互联网爬取，一刻电影原则上不提供任何下载资源，并且服务器上不存储任何影视资源及数据，也不参与录制、上传，影片版权归影片制作公司所有，如有侵权请给<img alt="联系方式" src="${homeDomain}/images/email_image.png">来信，我们会及时处理和回复，谢谢</li>
+      </ul>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="${homeDomain}/js/bootstrap.min.js"></script>
+    <script src="http://127.0.0.1:8099/js/movie.js"></script>
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?917956543024884ec3e6c5d84dc41fad";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+      
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+    </script>
+  </body>
+</html>
+</#macro>

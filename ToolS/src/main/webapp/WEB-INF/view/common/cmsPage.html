@@ -1,0 +1,60 @@
+<#macro paging listPage action params urlpath includeParams="get">
+<#if !urlpath??>
+    <#local urlpath = "" />
+</#if>
+<#if !params??>
+    <#local params = "" />
+</#if>
+<#if (listPage.listPage)??>
+<nav aria-label="Page navigation">
+  <#if listPage.page != 0 && listPage.page != 1>
+  <ul class="pagination">
+    <#if (listPage.firstRow + 1) gt 0>
+    <li>
+      <a href="${action}${urlpath}?p=${listPage.currPage-1}<#if params != ''>&${params}</#if>" aria-label="Previous">
+        <span aria-hidden="true">上一页</span>
+      </a>
+    </li>
+    </#if>
+    
+    <#local start = 1 />
+    <#if listPage.currPage gt 5>
+        <#local start = listPage.currPage - 2 />
+        <li><a href="${action}${urlpath}?p=1<#if params??>&${params}</#if>">1</a></li>
+        <li><a href="${action}${urlpath}?p=2<#if params??>&${params}</#if>">2</a></li>
+        <li>&hellip;</li>
+    </#if>
+    
+    <#local end = listPage.currPage + 1 />
+    <#if end gt listPage.page>
+    <#local end = listPage.page />
+    </#if>
+    <#list start..end as x>
+        <#if x == listPage.currPage>
+        <li class="active"><a href="#">${x?c}</a></li>
+        <#else>
+        <li><a href="${action}${urlpath}?p=${x?c}<#if params != ''>&${params}</#if>">${x?c}</a></li>
+        </#if>
+    </#list>
+    <!--后面页数过多显示...-->
+    <#if end lte (listPage.page - 2)>
+        <li><a>&hellip;</a></li>
+    </#if>
+    <#if end lt (listPage.page - 1)>
+        <li><a href="${action}${urlpath}?p=${(listPage.page - 1)?c}<#if params != ''>&${params}</#if>">${(listPage.page - 1)?c}</a></li>
+    </#if>
+    <#if end lt listPage.page>
+        <li><a href="${action}${urlpath}?p=${(listPage.page)?c}<#if params != ''>&${params}</#if>">${(listPage.page)?c}</a></li>
+    </#if>
+    <#if listPage.currPage lt listPage.page>
+    <li>
+      <a href="${action}${urlpath}?p=${(listPage.currPage+1)?c}<#if params != ''>&${params}</#if>" aria-label="Next">
+        <span aria-hidden="true">下一页</span>
+      </a>
+    </li>
+    </#if>
+  </ul>
+  </#if>
+</nav>
+</#if>
+</#macro>
