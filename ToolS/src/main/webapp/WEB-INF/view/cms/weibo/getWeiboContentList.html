@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>微博列表</title>
@@ -132,8 +133,16 @@
             </tr>
             <tr>
                 <td colspan="8">
-                    <ul>
-                        <li></li>
+                    <ul class="clearfix">
+                        <#if (weiboContentList.gifList)?? && weiboContentList.gifList?size gt 0>
+                        <#list weiboContentList.largeImageList as largeImage>
+                        <li style="float:left"><img style="height:225px" src="https:${largeImage}"></li>
+                        </#list>
+                        <#elseif (weiboContentList.largeImageList)?? && weiboContentList.largeImageList?size gt 0>
+                        <#list weiboContentList.smallImageList as smallImage>
+                        <li style="float:left;padding:3px;margin-left:5px;background-color:#fff"><img class="weiboContentImage" style="max-height:225px;cursor:pointer;" src="https:${smallImage}" alt="点击放大" imageSize="small"></li>
+                        </#list>
+                        </#if>
                     </ul>
                 </td>
             </tr>
@@ -149,6 +158,16 @@
     <script src="../../js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(function() {
+        	$('.weiboContentImage').click(function() {
+        		var $this = $(this);
+        		if ($this.attr('imageSize') == 'small') {
+        			$this.attr('imageSize', 'large');
+        			$this.attr('src', $this.attr('src').replace('thumb150', 'mw690'));
+        		} else {
+        			$this.attr('imageSize', 'small');
+        			$this.attr('src', $this.attr('src').replace('mw690', 'thumb150'));
+        		}
+        	});
             $('.sel-weibo-user').change(function() {
                 var $this = $(this);
                 window.location.href = $this.find("option:selected").attr('data-href');

@@ -387,210 +387,215 @@ public class WeiboUtilsController {
     @ResponseBody
     public String startSpider(HttpServletRequest request) throws Exception {
         int pageNum = StringUtils.isNotBlank(request.getParameter("pageNum")) ? Integer.parseInt(request.getParameter("pageNum")) : 100;
-        String userUrl = "https://weibo.com/u/5857314727";
-        Map<String, String> cookiesMap = getCookies();
-        String jointStr = getPageInfo(cookiesMap, userUrl);
-//        if (cookiesMap == null || cookiesMap.isEmpty()) {
-//            cookiesMap = cmsCookiesUtilsController.getWeiboCookies();
-//        }
-        long lastVisitWeiboTime = 0;
-        int page = 1;
-        while (page <= pageNum) {
-            logger.info("//************* 开始爬取第" + page + "页 ***********//");
-            for (int i = 0; i < 3; i++) {
-                String url = "";
-                if (i == 0) {
-                    url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + (page - 1) + "&pagebar=" + 0;
-                }
-                if (i == 1) {
-                    url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + page + "&pagebar=" + 0;
-                }
-                if (i == 2) {
-                    url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + page + "&pagebar=" + page;
-                }
-                //System.out.println("  ------ 爬取的url为：" + url + " -------");
-                Connection conn = ConnectionUtil.getConnection(url).cookies(cookiesMap);
-                conn.get();
-                String html = conn.response().body();
-                System.out.println(html);
-                if (!html.startsWith("{")) { //没有cookies或cookies已过期
-                    return "noCookies";
-                }
-                JSONObject jsonObj = new JSONObject(html);
-                if (jsonObj.has("data")) {
-                    String data = jsonObj.getString("data");
-                    Document dataDoc = Jsoup.parse(data);
-                    Elements midEls = dataDoc.select("div[mid].WB_cardwrap"); //微博id的内容列表
-                    for (Element midEl : midEls) { //循环每一条微博
-                        Elements detailAEls = midEl.select("div.WB_detail").select("div.WB_from").select("a");
-                        Element detailAEl = detailAEls.get(0);
-                        String detailHref = detailAEl.attr("href");
-                        String weiboDetailDate = detailAEl.attr("title");
-                        Date detailDate = DateUtils.convertStringToDate(DateUtils.longminutePattern, weiboDetailDate);
-                        long detailDateLong = detailDate.getTime();
-                        if (lastVisitWeiboTime == 0) {
-                            lastVisitWeiboTime = detailDateLong;
-                        }
-                        //if (isCheckLastTime && detailDateLong <= hasLastVisitWeiboTime) continue;
-                        String mid = midEl.attr("mid"); //微博id
-//                        if (isnew) {
-//                            Query query = new Query();
-//                            query.addCriteria(Criteria.where("weiboId").is(mid));
-//                            WeiboComment hasWeiboComment = mongoTemplate.findOne(query, WeiboComment.class);
-//                            if (hasWeiboComment != null && hasWeiboComment.getId() != null) continue; //暂时仅爬取最新的微博，后续添加再次爬取参数
-//                        }
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        
-                        Element WB_info_el = midEl.select("div.WB_info").get(0); //发微博用户的信息
-                        Element usercardEl = WB_info_el.select("a[usercard]").get(0); //用户的链接
-                        String usercard = usercardEl.attr("usercard");
-                        String weiboUid = null;
-                        if (usercard.indexOf("id=") != -1) {
-                            String usercardTmp = usercard.split("id=")[1];
-                            weiboUid = usercardTmp.substring(0, usercardTmp.indexOf("&"));
-                        }
-                        String weiboUname = usercardEl.text();
-                        Elements feed_list_content_els = midEl.select("div[node-type=feed_list_content]"); //每一条微博的内容element
-                        for (Element feed_list_content_el : feed_list_content_els) { //循环每一条微博
-                            Map<String, Object> weiboMap = Maps.newHashMap();
-                            weiboMap.put("weiboId", mid); // 微博内容id
-                            weiboMap.put("weiboUid", weiboUid);
-                            weiboMap.put("weiboUname", weiboUname);
-                            long now = System.currentTimeMillis();
-                            weiboMap.put("createTime", now);
-                            weiboMap.put("updateTime", now);
-                            weiboMap.put("weiboDetailUrl", detailHref);
-                            weiboMap.put("weiboDetailTime", detailDateLong);
-                            String longContentText = null;
-                            Elements WB_media_a = feed_list_content_el.parent().select("ul.WB_media_a");
-                            if (WB_media_a != null) {
-                                String action_data = WB_media_a.attr("action-data");
-                                //System.out.println("================  " + action_data);
-                                List<String> largeImageList = Lists.newArrayList();
-                                if (StringUtils.isNotBlank(action_data)) {
-                                    String[] action_datas = action_data.split("&");
-                                    for (String adata : action_datas) {
-                                        if (adata.indexOf("clear_picSrc=") != -1) { //查找出所有的大图链接
-                                            adata = adata.replace("clear_picSrc=", "");
-                                            String[] adataArr = adata.split(",");
-                                            for (String ad : adataArr) {
-                                                largeImageList.add(URLDecoder.decode(ad, "utf-8"));
-                                            }
-                                        }
-                                    }
-                                }
-                                weiboMap.put("largeImageList", largeImageList);
-                                Elements WB_media_a_lis = WB_media_a.select("li");
-                                List<String> smallImageList = Lists.newArrayList();
-                                List<String> gifList = Lists.newArrayList();
-                                List<String> videoList = Lists.newArrayList();
-                                for (Element WB_media_a_li : WB_media_a_lis) {
-                                    if (WB_media_a_li.hasClass("WB_video")) { //视频
-                                        String video_action_data = WB_media_a_li.attr("action-data");
-                                        if (StringUtils.isNotBlank(video_action_data)) {
-                                            logger.info("================  " + video_action_data);
-                                            String[] action_datas = video_action_data.split("&");
-                                            for (String adata : action_datas) {
-                                                if (adata.indexOf("video_src") != -1) {
-                                                    adata = adata.replace("video_src=", "");
-                                                    String[] adataArr = adata.split(",");
-                                                    for (String ad : adataArr) {
-                                                        videoList.add(URLDecoder.decode(ad, "utf-8"));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } else if (WB_media_a_li.hasClass("WB_pic")) { //图片
-                                        String gif_action_data = WB_media_a_li.attr("action-data");
-                                        if (StringUtils.isNotBlank(gif_action_data)) {
-                                            logger.info("================  " + gif_action_data);
-                                            String[] action_datas = gif_action_data.split("&");
-                                            for (String adata : action_datas) {
-                                                if (adata.indexOf("gif_url") != -1) {
-                                                    adata = adata.replace("gif_url=", "");
-                                                    String[] adataArr = adata.split(",");
-                                                    for (String ad : adataArr) {
-                                                        gifList.add(URLDecoder.decode(ad, "utf-8"));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        Elements WB_gif_boxs = WB_media_a_li.select("div.WB_gif_box");
-                                        if (WB_gif_boxs != null && WB_gif_boxs.size() > 0) {
-                                            for (Element WB_gif_box : WB_gif_boxs) {
-                                                if (WB_gif_box.select("img") != null && WB_gif_box.select("img").size() > 0) {
-                                                    Element gif_img = WB_gif_box.select("img").get(0);
-                                                    smallImageList.add(gif_img.attr("src"));
-                                                }
-                                            }
-                                        } else {
-                                            Elements imgEls = WB_media_a_li.select("img");
-                                            for (Element imgEl : imgEls) {
-                                                smallImageList.add(imgEl.attr("src"));
-                                            }
-                                        }
-                                    }
-                                }
-                                weiboMap.put("videoList", videoList);
-                                weiboMap.put("gifList", gifList);
-                                weiboMap.put("smallImageList", smallImageList); //内容小图
-                            }
-                            Elements WB_text_opt_els = feed_list_content_el.select("a.WB_text_opt"); //判断是否有长微博被隐藏
-                            if (WB_text_opt_els != null && WB_text_opt_els.size() > 0) {
-                                Element WB_text_opt_el = feed_list_content_el.select("a.WB_text_opt").get(0);
-                                String WB_text_opt_html = WB_text_opt_el.html();
-                                if (WB_text_opt_html.indexOf("展开全文") != -1) { //存在展开全文的链接
-                                    longContentText = longContent(cookiesMap, mid);
-                                    logger.info(longContentText);
-                                }
-                            } else {
-                                weiboMap.put("content", feed_list_content_el.html());
-                                logger.info(feed_list_content_el.html());
-                            }
-                            logger.info("===========================  ");
-                            logger.info(weiboMap.get("weiboId").toString());
-                            logger.info(weiboMap.get("content").toString());
-                            Map<String, Object> resultMap = mongoTemplate.save(weiboMap, "weibo_content");
-                            
-                            System.out.println(resultMap);
-                            /*if (weiboMap.containsKey("largeImageList")) {
-                                List<String> largeImageList = (List<String>) weiboMap.get("largeImageList");
-                                for (String largeImage : largeImageList) {
-                                    System.out.println("largeImage：" + largeImage);
-                                }
-                            }
-                            if (weiboMap.containsKey("videoList")) {
-                                List<String> videoList = (List<String>) weiboMap.get("videoList");
-                                for (String video : videoList) {
-                                    System.out.println("video：" + video);
-                                }
-                            }
-                            if (weiboMap.containsKey("gifList")) {
-                                List<String> gifList = (List<String>) weiboMap.get("gifList");
-                                for (String gif : gifList) {
-                                    System.out.println("gif：" + gif);
-                                }
-                            }
-                            if (weiboMap.containsKey("smallImageList")) {
-                                List<String> smallImageList = (List<String>) weiboMap.get("smallImageList");
-                                for (String smallImage : smallImageList) {
-                                    System.out.println("smallImage：" + smallImage);
-                                }
-                            }*/
-                            logger.info("===========================  ");
-                        }
+        Sort sort = Sort.by(Direction.DESC, "update_time");
+        List<WeiboUser> weiboUserList = mongoTemplate.find(new Query().with(sort), WeiboUser.class);
+        
+        for (WeiboUser weiboUser : weiboUserList) {
+            String userUrl = weiboUser.getUserUrl();//"https://weibo.com/u/5857314727";
+            Map<String, String> cookiesMap = getCookies();
+            String jointStr = getPageInfo(cookiesMap, userUrl);
+    //        if (cookiesMap == null || cookiesMap.isEmpty()) {
+    //            cookiesMap = cmsCookiesUtilsController.getWeiboCookies();
+    //        }
+            long lastVisitWeiboTime = 0;
+            int page = 1;
+            while (page <= pageNum) {
+                logger.info("//************* 开始爬取第" + page + "页 ***********//");
+                for (int i = 0; i < 3; i++) {
+                    String url = "";
+                    if (i == 0) {
+                        url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + (page - 1) + "&pagebar=" + 0;
                     }
-                } else {
-                    break;
+                    if (i == 1) {
+                        url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + page + "&pagebar=" + 0;
+                    }
+                    if (i == 2) {
+                        url = mblogUrl + jointStr + "&page=" + page + "&pre_page=" + page + "&pagebar=" + page;
+                    }
+                    //System.out.println("  ------ 爬取的url为：" + url + " -------");
+                    Connection conn = ConnectionUtil.getConnection(url).cookies(cookiesMap);
+                    conn.get();
+                    String html = conn.response().body();
+                    System.out.println(html);
+                    if (!html.startsWith("{")) { //没有cookies或cookies已过期
+                        return "noCookies";
+                    }
+                    JSONObject jsonObj = new JSONObject(html);
+                    if (jsonObj.has("data")) {
+                        String data = jsonObj.getString("data");
+                        Document dataDoc = Jsoup.parse(data);
+                        Elements midEls = dataDoc.select("div[mid].WB_cardwrap"); //微博id的内容列表
+                        for (Element midEl : midEls) { //循环每一条微博
+                            Elements detailAEls = midEl.select("div.WB_detail").select("div.WB_from").select("a");
+                            Element detailAEl = detailAEls.get(0);
+                            String detailHref = detailAEl.attr("href");
+                            String weiboDetailDate = detailAEl.attr("title");
+                            Date detailDate = DateUtils.convertStringToDate(DateUtils.longminutePattern, weiboDetailDate);
+                            long detailDateLong = detailDate.getTime();
+                            if (lastVisitWeiboTime == 0) {
+                                lastVisitWeiboTime = detailDateLong;
+                            }
+                            //if (isCheckLastTime && detailDateLong <= hasLastVisitWeiboTime) continue;
+                            String mid = midEl.attr("mid"); //微博id
+    //                        if (isnew) {
+    //                            Query query = new Query();
+    //                            query.addCriteria(Criteria.where("weiboId").is(mid));
+    //                            WeiboComment hasWeiboComment = mongoTemplate.findOne(query, WeiboComment.class);
+    //                            if (hasWeiboComment != null && hasWeiboComment.getId() != null) continue; //暂时仅爬取最新的微博，后续添加再次爬取参数
+    //                        }
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            
+                            Element WB_info_el = midEl.select("div.WB_info").get(0); //发微博用户的信息
+                            Element usercardEl = WB_info_el.select("a[usercard]").get(0); //用户的链接
+                            String usercard = usercardEl.attr("usercard");
+                            String weiboUid = null;
+                            if (usercard.indexOf("id=") != -1) {
+                                String usercardTmp = usercard.split("id=")[1];
+                                weiboUid = usercardTmp.substring(0, usercardTmp.indexOf("&"));
+                            }
+                            String weiboUname = usercardEl.text();
+                            Elements feed_list_content_els = midEl.select("div[node-type=feed_list_content]"); //每一条微博的内容element
+                            for (Element feed_list_content_el : feed_list_content_els) { //循环每一条微博
+                                Map<String, Object> weiboMap = Maps.newHashMap();
+                                weiboMap.put("weiboId", mid); // 微博内容id
+                                weiboMap.put("weiboUid", weiboUid);
+                                weiboMap.put("weiboUname", weiboUname);
+                                long now = System.currentTimeMillis();
+                                weiboMap.put("createTime", now);
+                                weiboMap.put("updateTime", now);
+                                weiboMap.put("weiboDetailUrl", detailHref);
+                                weiboMap.put("weiboDetailTime", detailDateLong);
+                                String longContentText = null;
+                                Elements WB_media_a = feed_list_content_el.parent().select("ul.WB_media_a");
+                                if (WB_media_a != null) {
+                                    String action_data = WB_media_a.attr("action-data");
+                                    //System.out.println("================  " + action_data);
+                                    List<String> largeImageList = Lists.newArrayList();
+                                    if (StringUtils.isNotBlank(action_data)) {
+                                        String[] action_datas = action_data.split("&");
+                                        for (String adata : action_datas) {
+                                            if (adata.indexOf("clear_picSrc=") != -1) { //查找出所有的大图链接
+                                                adata = adata.replace("clear_picSrc=", "");
+                                                String[] adataArr = adata.split(",");
+                                                for (String ad : adataArr) {
+                                                    largeImageList.add(URLDecoder.decode(ad, "utf-8"));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    weiboMap.put("largeImageList", largeImageList);
+                                    Elements WB_media_a_lis = WB_media_a.select("li");
+                                    List<String> smallImageList = Lists.newArrayList();
+                                    List<String> gifList = Lists.newArrayList();
+                                    List<String> videoList = Lists.newArrayList();
+                                    for (Element WB_media_a_li : WB_media_a_lis) {
+                                        if (WB_media_a_li.hasClass("WB_video")) { //视频
+                                            String video_action_data = WB_media_a_li.attr("action-data");
+                                            if (StringUtils.isNotBlank(video_action_data)) {
+                                                logger.info("================  " + video_action_data);
+                                                String[] action_datas = video_action_data.split("&");
+                                                for (String adata : action_datas) {
+                                                    if (adata.indexOf("video_src") != -1) {
+                                                        adata = adata.replace("video_src=", "");
+                                                        String[] adataArr = adata.split(",");
+                                                        for (String ad : adataArr) {
+                                                            videoList.add(URLDecoder.decode(ad, "utf-8"));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else if (WB_media_a_li.hasClass("WB_pic")) { //图片
+                                            String gif_action_data = WB_media_a_li.attr("action-data");
+                                            if (StringUtils.isNotBlank(gif_action_data)) {
+                                                logger.info("================  " + gif_action_data);
+                                                String[] action_datas = gif_action_data.split("&");
+                                                for (String adata : action_datas) {
+                                                    if (adata.indexOf("gif_url") != -1) {
+                                                        adata = adata.replace("gif_url=", "");
+                                                        String[] adataArr = adata.split(",");
+                                                        for (String ad : adataArr) {
+                                                            gifList.add(URLDecoder.decode(ad, "utf-8"));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            
+                                            Elements WB_gif_boxs = WB_media_a_li.select("div.WB_gif_box");
+                                            if (WB_gif_boxs != null && WB_gif_boxs.size() > 0) {
+                                                for (Element WB_gif_box : WB_gif_boxs) {
+                                                    if (WB_gif_box.select("img") != null && WB_gif_box.select("img").size() > 0) {
+                                                        Element gif_img = WB_gif_box.select("img").get(0);
+                                                        smallImageList.add(gif_img.attr("src"));
+                                                    }
+                                                }
+                                            } else {
+                                                Elements imgEls = WB_media_a_li.select("img");
+                                                for (Element imgEl : imgEls) {
+                                                    smallImageList.add(imgEl.attr("src"));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    weiboMap.put("videoList", videoList);
+                                    weiboMap.put("gifList", gifList);
+                                    weiboMap.put("smallImageList", smallImageList); //内容小图
+                                }
+                                Elements WB_text_opt_els = feed_list_content_el.select("a.WB_text_opt"); //判断是否有长微博被隐藏
+                                if (WB_text_opt_els != null && WB_text_opt_els.size() > 0) {
+                                    Element WB_text_opt_el = feed_list_content_el.select("a.WB_text_opt").get(0);
+                                    String WB_text_opt_html = WB_text_opt_el.html();
+                                    if (WB_text_opt_html.indexOf("展开全文") != -1) { //存在展开全文的链接
+                                        longContentText = longContent(cookiesMap, mid);
+                                        logger.info(longContentText);
+                                    }
+                                } else {
+                                    weiboMap.put("content", feed_list_content_el.html());
+                                    logger.info(feed_list_content_el.html());
+                                }
+                                logger.info("===========================  ");
+                                logger.info(weiboMap.get("weiboId").toString());
+                                logger.info(weiboMap.get("content").toString());
+                                Map<String, Object> resultMap = mongoTemplate.save(weiboMap, "weibo_content");
+                                
+                                System.out.println(resultMap);
+                                /*if (weiboMap.containsKey("largeImageList")) {
+                                    List<String> largeImageList = (List<String>) weiboMap.get("largeImageList");
+                                    for (String largeImage : largeImageList) {
+                                        System.out.println("largeImage：" + largeImage);
+                                    }
+                                }
+                                if (weiboMap.containsKey("videoList")) {
+                                    List<String> videoList = (List<String>) weiboMap.get("videoList");
+                                    for (String video : videoList) {
+                                        System.out.println("video：" + video);
+                                    }
+                                }
+                                if (weiboMap.containsKey("gifList")) {
+                                    List<String> gifList = (List<String>) weiboMap.get("gifList");
+                                    for (String gif : gifList) {
+                                        System.out.println("gif：" + gif);
+                                    }
+                                }
+                                if (weiboMap.containsKey("smallImageList")) {
+                                    List<String> smallImageList = (List<String>) weiboMap.get("smallImageList");
+                                    for (String smallImage : smallImageList) {
+                                        System.out.println("smallImage：" + smallImage);
+                                    }
+                                }*/
+                                logger.info("===========================  ");
+                            }
+                        }
+                    } else {
+                        break;
+                    }
                 }
+                logger.info("//************* 第" + page + "页爬取结束 ***********//");
+                page++;
             }
-            logger.info("//************* 第" + page + "页爬取结束 ***********//");
-            page++;
         }
         return "success";
     }
