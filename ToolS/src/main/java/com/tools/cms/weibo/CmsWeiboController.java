@@ -52,21 +52,21 @@ public class CmsWeiboController extends WeiboUtilsController {
         String order = request.getParameter("order");
         String userId = request.getParameter("userId");
         String searchQuery = request.getParameter("searchQuery");
-        String userUrl = "";
-        if (StringUtils.isNotBlank(userId)) {
-            Query userQuery = new Query();
-            userQuery.addCriteria(Criteria.where("_id").is(userId));
-            WeiboUser weiboUser = mongoTemplate.findOne(userQuery, WeiboUser.class);
-            userUrl = weiboUser.getUserUrl();
-        }
         Query query = new Query();
         if (request.getParameter("isAdd") != null) {
             Integer isAdd = Integer.parseInt(request.getParameter("isAdd"));
             query.addCriteria(Criteria.where("isAdd").is(isAdd));
             modelMap.addAttribute("isAdd", isAdd);
         }
-        if (StringUtils.isNotBlank(userUrl)) {
+        /*if (StringUtils.isNotBlank(userUrl)) {
             query.addCriteria(Criteria.where("userStr").is(userUrl));
+        }*/
+        if (StringUtils.isNotBlank(userId)) {
+            /*Query userQuery = new Query();
+            userQuery.addCriteria(Criteria.where("_id").is(userId));
+            WeiboUser weiboUser = mongoTemplate.findOne(userQuery, WeiboUser.class);
+            userUrl = weiboUser.getUserUrl();*/
+            query.addCriteria(Criteria.where("userId").is(userId));
         }
         if (StringUtils.isNotBlank(searchQuery)) {
             if (NumberUtils.isCreatable(searchQuery)) {
@@ -78,7 +78,7 @@ public class CmsWeiboController extends WeiboUtilsController {
         }
         long allRow = mongoTemplate.count(query, Map.class, "weibo_content");
         Sort sort = Sort.by(StringUtils.isNotBlank(order) && order.equals("asc") ? Direction.ASC : Direction.DESC,
-                StringUtils.isNotBlank(orderCol) ? orderCol : "create_time");
+                StringUtils.isNotBlank(orderCol) ? orderCol : "createTime");
         Pageable pageable = PageRequest.of(p, 30, sort);
         List<Map> weiboContentList = mongoTemplate.find(query.with(pageable), Map.class, "weibo_content");
         for (Map weiboContentMap : weiboContentList) {
