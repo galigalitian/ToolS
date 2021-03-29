@@ -64,8 +64,8 @@
 	                <td><#if (weiboUser.create_time)??>${weiboUser.create_time?datetime}</#if></td>
 	                <td><#if (weiboUser.update_time)??>${weiboUser.update_time?datetime}</#if></td>
 	                <td>
-	                    <a href="javascript:;" class="spider-agin" weiboUserId="${weiboUser.id}">重新爬取</a>&nbsp;|&nbsp;<a href="#">爬取全部</a><br>
-	                    <a href="#">禁止爬取</a>&nbsp;|&nbsp;<a href="#">删除</a>
+	                    <#--<a href="javascript:;" class="spider-agin" weiboUserId="${weiboUser.id}">重新爬取</a>&nbsp;|&nbsp;<a href="#">爬取全部</a><br>
+	                    <a href="#">禁止爬取</a>&nbsp;|&nbsp;<a href="#">删除</a>-->
 	                </td>
 	            </tr>
 	        </#list>

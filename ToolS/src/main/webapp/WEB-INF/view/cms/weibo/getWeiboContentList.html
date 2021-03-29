@@ -123,7 +123,6 @@
                 <td><#if (weiboContentList.createTime)??>${(weiboContentList.createTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.createTime?datetime)?string('HH:mm:ss')}</#if></td>
                 <td><#if (weiboContentList.updateTime)??>${(weiboContentList.updateTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.updateTime?datetime)?string('HH:mm:ss')}</#if></td>
                 <td>
-                    <a class="edit-other" target="_blank" href="/cms/manual/manualInputMovieNew?weiboCid=${weiboContentList.id}<#if (weiboContentList.doubanUrl)??>&douban_url=${weiboContentList.doubanUrl}</#if>">新增电影</a>&nbsp;|&nbsp;
                     <a class="" target="_blank" href="https://weibo.com<#if (weiboContentList.weiboDetailUrl)??>${weiboContentList.weiboDetailUrl}<#else>javascript:;</#if>">微博原文</a>&nbsp;|&nbsp;
                     <a class="del-weibo" href="javascript:;" weiboContentId="${weiboContentList.id}">删除</a>
                 </td>
