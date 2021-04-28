@@ -43,7 +43,7 @@ public class ChapterContentController {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
     
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(path = {"/", ""}, method = RequestMethod.GET)
     public String index() {
         return "chapterContent";
     }
