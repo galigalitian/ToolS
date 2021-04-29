@@ -392,6 +392,7 @@ public class WeiboUtilsController {
         
         for (WeiboUser weiboUser : weiboUserList) {
             String userUrl = weiboUser.getUserUrl();//"https://weibo.com/u/5857314727";
+            String userId = weiboUser.getId();
             Map<String, String> cookiesMap = getCookies();
             String jointStr = getPageInfo(cookiesMap, userUrl);
     //        if (cookiesMap == null || cookiesMap.isEmpty()) {
@@ -416,7 +417,7 @@ public class WeiboUtilsController {
                     Connection conn = ConnectionUtil.getConnection(url).cookies(cookiesMap);
                     conn.get();
                     String html = conn.response().body();
-                    System.out.println(html);
+//                    System.out.println(html);
                     if (!html.startsWith("{")) { //没有cookies或cookies已过期
                         return "noCookies";
                     }
@@ -469,6 +470,7 @@ public class WeiboUtilsController {
                                 weiboMap.put("updateTime", now);
                                 weiboMap.put("weiboDetailUrl", detailHref);
                                 weiboMap.put("weiboDetailTime", detailDateLong);
+                                weiboMap.put("userId", userId); // 抓取用户的mongodb中的用户id
                                 String longContentText = null;
                                 Elements WB_media_a = feed_list_content_el.parent().select("ul.WB_media_a");
                                 if (WB_media_a != null) {
@@ -559,9 +561,10 @@ public class WeiboUtilsController {
                                 logger.info("===========================  ");
                                 logger.info(weiboMap.get("weiboId").toString());
                                 logger.info(weiboMap.get("content").toString());
-                                Map<String, Object> resultMap = mongoTemplate.save(weiboMap, "weibo_content");
+                                /*Map<String, Object> resultMap = */
+                                mongoTemplate.save(weiboMap, "weibo_content");
                                 
-                                System.out.println(resultMap);
+//                                System.out.println(resultMap);
                                 /*if (weiboMap.containsKey("largeImageList")) {
                                     List<String> largeImageList = (List<String>) weiboMap.get("largeImageList");
                                     for (String largeImage : largeImageList) {

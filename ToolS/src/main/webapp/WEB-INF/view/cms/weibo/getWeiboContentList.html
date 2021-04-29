@@ -36,18 +36,18 @@
             <div class="info info-w">
                 <div class="sl">
                     <div class="info-row">
-                    <#--<select class="form-control text text155 sel-weibo-user">
+                    <select class="form-control text text155 sel-weibo-user">
                         <option value="" data-href="/cms/weibo/getWeiboContentList">选择微博用户</option>
                         <#list weiboUserList as weiboUser>
                         <option data-href="/cms/weibo/getWeiboContentList?userId=${weiboUser.id}" value="${weiboUser.id}" <#if userId?? && (userId == weiboUser.id)>selected="selected"</#if>>${weiboUser.userStr}</option>
                         </#list>
-                    </select>-->
+                    </select>
                     </div>
                 </div>
                 <div class="sl">
-                    <#--<div class="info-row">
+                    <div class="info-row">
                         <input class="form-control text" type="text" name="searchQuery" id="" value="${searchQuery}" placeholder="搜索内容">
-                    </div>-->
+                    </div>
                 </div>
                 <div class="sl padding-top-5">
                     <a id="searchBtn" href="javascript:;" class="padding-left-10 padding-right-10">搜索</a>
@@ -123,7 +123,6 @@
                 <td><#if (weiboContentList.createTime)??>${(weiboContentList.createTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.createTime?datetime)?string('HH:mm:ss')}</#if></td>
                 <td><#if (weiboContentList.updateTime)??>${(weiboContentList.updateTime?datetime)?string('yyyy-MM-dd')}<br>${(weiboContentList.updateTime?datetime)?string('HH:mm:ss')}</#if></td>
                 <td>
-                    <a class="edit-other" target="_blank" href="/cms/manual/manualInputMovieNew?weiboCid=${weiboContentList.id}<#if (weiboContentList.doubanUrl)??>&douban_url=${weiboContentList.doubanUrl}</#if>">新增电影</a>&nbsp;|&nbsp;
                     <a class="" target="_blank" href="https://weibo.com<#if (weiboContentList.weiboDetailUrl)??>${weiboContentList.weiboDetailUrl}<#else>javascript:;</#if>">微博原文</a>&nbsp;|&nbsp;
                     <a class="del-weibo" href="javascript:;" weiboContentId="${weiboContentList.id}">删除</a>
                 </td>
